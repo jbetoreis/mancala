@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bapcgogbn6dxe"]
+
+[ext_resource type="Texture2D" uid="uid://dvkwdyi7snyvl" path="res://assets/IndicadorDePontos.png" id="1_ktub4"]
+[ext_resource type="Script" path="res://scripts/indicador_de_pontos.gd" id="1_l17ay"]
+
+[node name="IndicadorDePontos" type="Node2D"]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_l17ay")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(1.00978, 1)
+texture = ExtResource("1_ktub4")
+
+[node name="Indicador" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+horizontal_alignment = 1
+vertical_alignment = 1

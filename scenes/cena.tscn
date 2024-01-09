@@ -1,0 +1,130 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8tsgkh5vh6ju"]
+
+[ext_resource type="Script" path="res://scripts/controller.gd" id="1_n2u1v"]
+[ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="2_tbn0c"]
+[ext_resource type="Texture2D" uid="uid://cs7lawsjlsa1v" path="res://assets/tabuleiro.png" id="2_w3050"]
+[ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="3_pj5ji"]
+
+[node name="Cena" type="Node2D"]
+script = ExtResource("1_n2u1v")
+
+[node name="Tabuleiro" type="Node2D" parent="."]
+position = Vector2(544, 312)
+
+[node name="Casas" type="Node2D" parent="Tabuleiro"]
+
+[node name="Buraco0" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-264, 56)
+skew = -0.0296706
+
+[node name="Buraco1" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-144, 56)
+posicao = 1
+
+[node name="Buraco2" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-24, 56)
+posicao = 2
+
+[node name="Buraco3" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(96, 56)
+posicao = 3
+
+[node name="Buraco4" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(208, 56)
+posicao = 4
+
+[node name="Buraco5" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(336, 56)
+posicao = 5
+
+[node name="Kalla01" type="Marker2D" parent="Tabuleiro/Casas"]
+position = Vector2(463, 7)
+
+[node name="Buraco7" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(332, -50)
+posicao = 7
+
+[node name="Buraco8" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(208, -49)
+posicao = 8
+
+[node name="Buraco9" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(96, -50)
+posicao = 9
+
+[node name="Buraco10" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-24, -50)
+posicao = 10
+
+[node name="Buraco11" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-144, -50)
+posicao = 11
+
+[node name="Buraco12" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
+position = Vector2(-264, -50)
+posicao = 12
+
+[node name="Kalla02" type="Marker2D" parent="Tabuleiro/Casas"]
+position = Vector2(-398, 3)
+
+[node name="Indicadores" type="Node2D" parent="Tabuleiro"]
+
+[node name="IndicadorDePontos0" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-264, 174)
+
+[node name="IndicadorDePontos1" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-144, 174)
+
+[node name="IndicadorDePontos2" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-24, 174)
+
+[node name="IndicadorDePontos3" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(96, 174)
+
+[node name="IndicadorDePontos4" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(208, 174)
+
+[node name="IndicadorDePontos5" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(332, 174)
+
+[node name="IndicadorDePontos6" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(463, 174)
+
+[node name="IndicadorDePontos7" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(332, -173)
+
+[node name="IndicadorDePontos8" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(208, -173)
+
+[node name="IndicadorDePontos9" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(96, -173)
+
+[node name="IndicadorDePontos10" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-24, -173)
+
+[node name="IndicadorDePontos11" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-144, -173)
+
+[node name="IndicadorDePontos12" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-264, -173)
+
+[node name="IndicadorDePontos13" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
+position = Vector2(-398, -173)
+
+[node name="Sprite" type="Sprite2D" parent="Tabuleiro"]
+position = Vector2(31, 6)
+scale = Vector2(4, 4.04559)
+texture = ExtResource("2_w3050")
+
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco0" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco1" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco2" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco3" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco4" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco5" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco7" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco8" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco9" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco10" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco11" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco12" to="." method="_on_buraco_casa_selecionada"]

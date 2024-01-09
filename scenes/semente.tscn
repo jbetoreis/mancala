@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxhnei0tdu3wu"]
+
+[ext_resource type="Texture2D" uid="uid://ki7s2pp2iuih" path="res://assets/semente.png" id="1_e5l41"]
+[ext_resource type="Script" path="res://scripts/semente.gd" id="1_ohr5q"]
+
+[node name="Semente" type="Node2D"]
+scale = Vector2(4, 3.95402)
+script = ExtResource("1_ohr5q")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_e5l41")
