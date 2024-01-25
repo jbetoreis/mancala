@@ -16,16 +16,16 @@ var jogador2 = {
 
 var turno_atual = {
 	"jogador": jogador1,
-	"jogadas": 1,
+	"jogadas": 0,
 }
-
-var turno_liberado = false;
 
 var tabuleiro = []
 var casas_opostas = []
 
 func _ready():
-	rpc_id(1, "partida_iniciada", DadosBase.my_channel)
+	var meu_id = multiplayer.get_unique_id();
+	if GameManager.Players[str(meu_id)]["index"] == 1:
+		turno_atual["jogadas"] = 1;
 	
 	tabuleiro = [
 		{
@@ -36,6 +36,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos0,
 			"jogador": jogador1,
 			"casa_oposta": 12,
+			"casa_adversario": 7,
 		},
 		{
 			"chave": "buraco",
@@ -45,6 +46,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos1,
 			"jogador": jogador1,
 			"casa_oposta": 11,
+			"casa_adversario": 8,
 		},
 		{
 			"chave": "buraco",
@@ -54,6 +56,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos2,
 			"jogador": jogador1,
 			"casa_oposta": 10,
+			"casa_adversario": 9,
 		},
 		{
 			"chave": "buraco",
@@ -63,6 +66,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos3,
 			"jogador": jogador1,
 			"casa_oposta": 9,
+			"casa_adversario": 10,
 		},
 		{
 			"chave": "buraco",
@@ -72,6 +76,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos4,
 			"jogador": jogador1,
 			"casa_oposta": 8,
+			"casa_adversario": 11,
 		},
 		{
 			"chave": "buraco",
@@ -81,6 +86,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos5,
 			"jogador": jogador1,
 			"casa_oposta": 7,
+			"casa_adversario": 12,
 		},
 		{
 			"chave": "kalla",
@@ -98,6 +104,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos7,
 			"jogador": jogador2,
 			"casa_oposta": 5,
+			"casa_adversario": 0,
 		},
 		{
 			"chave": "buraco",
@@ -107,6 +114,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos8,
 			"jogador": jogador2,
 			"casa_oposta": 4,
+			"casa_adversario": 1,
 		},
 		{
 			"chave": "buraco",
@@ -116,6 +124,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos9,
 			"jogador": jogador2,
 			"casa_oposta": 3,
+			"casa_adversario": 2,
 		},
 		{
 			"chave": "buraco",
@@ -125,6 +134,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos10,
 			"jogador": jogador2,
 			"casa_oposta": 2,
+			"casa_adversario": 3,
 		},
 		{
 			"chave": "buraco",
@@ -134,6 +144,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos11,
 			"jogador": jogador2,
 			"casa_oposta": 1,
+			"casa_adversario": 4,
 		},
 		{
 			"chave": "buraco",
@@ -143,6 +154,7 @@ func _ready():
 			"indicador": $Tabuleiro/Indicadores/IndicadorDePontos12,
 			"jogador": jogador2,
 			"casa_oposta": 0,
+			"casa_adversario": 5,
 		},
 		{
 			"chave": "kalla",
@@ -160,7 +172,11 @@ func _ready():
 func _process(delta):
 	pass
 
+@rpc("any_peer","call_local")
 func distribuir_sementes(casa_selecionada, jogador):
+	var is_remote = multiplayer.get_remote_sender_id() != multiplayer.get_unique_id();
+	if is_remote:
+		casa_selecionada = tabuleiro[casa_selecionada]["casa_adversario"];
 	if casa_selecionada < 0 or casa_selecionada > 13:
 		return
 	if casa_selecionada in [6, 13]:  # 6 e 13 Kallas
@@ -182,15 +198,18 @@ func distribuir_sementes(casa_selecionada, jogador):
 		
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
-				if tabuleiro[i]["total_sementes"] <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"]:
-					await capturarSementes(i)
+				if tabuleiro[i]["total_sementes"] <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and !is_remote:
+					await rpc("capturarSementes", i)
 				
-				if jogador["indicador"] == 1:
-					turno_atual["jogador"] = jogador2
+				if is_remote:
+					turno_atual["jogadas"] = 1
 				else:
-					turno_atual["jogador"] = jogador1
-					
-			turno_atual["jogadas"] = 1
+					turno_atual["jogadas"] = 0
+			else:
+				if is_remote:
+					turno_atual["jogadas"] = 0
+				else:
+					turno_atual["jogadas"] = 1
 			break
 		elif i == 13: # Ainda falta sementes para distribuir
 			i = 0;
@@ -219,13 +238,21 @@ func _on_buraco_casa_selecionada(posicao):
 		return
 	if (tabuleiro[posicao]["sementes"]).size() <= 0:
 		return
-	distribuir_sementes(posicao, turno_atual["jogador"])
+	rpc("distribuir_sementes", posicao, turno_atual["jogador"])
 
+@rpc("any_peer","call_local")
 func capturarSementes(casa):
+	var is_remote = multiplayer.get_remote_sender_id() != multiplayer.get_unique_id();
+	if is_remote:
+		casa = tabuleiro[casa]["casa_adversario"];
 	var timer = 0.5;
 	var casa_oposta = tabuleiro[casa]["casa_oposta"];
+	
+	# var kalla = tabuleiro[6];
+	# if turno_atual["jogador"]["indicador"] == 2:
+	#	kalla = tabuleiro[13];
 	var kalla = tabuleiro[6];
-	if turno_atual["jogador"]["indicador"] == 2:
+	if is_remote:
 		kalla = tabuleiro[13];
 	
 	var posicao_destino = kalla["posicao"].position;
@@ -244,12 +271,3 @@ func guardarSementes(casa, posicao_destino, kalla_destino):
 		tabuleiro[casa]["indicador"].decrementar();
 		
 		await get_tree().create_timer(0.5).timeout;
-
-@rpc("reliable")
-func partida_iniciada(channel):
-	pass
-
-@rpc("reliable")
-func liberar_turno():
-	print("Turno liberado")
-	turno_liberado = true;

@@ -1,0 +1,81 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckyqhb5ri6b72"]
+
+[ext_resource type="Script" path="res://Client.gd" id="1_7uk57"]
+[ext_resource type="Script" path="res://Server.gd" id="2_eiyka"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Client" type="Node" parent="."]
+script = ExtResource("1_7uk57")
+
+[node name="KeyToConnect" type="LineEdit" parent="Client"]
+offset_left = 192.0
+offset_top = 170.0
+offset_right = 259.063
+offset_bottom = 201.0
+
+[node name="PartidaGerada" type="TextEdit" parent="Client"]
+visible = false
+offset_left = 52.0
+offset_top = 220.0
+offset_right = 577.0
+offset_bottom = 262.0
+scale = Vector2(1, 1.02322)
+editable = false
+
+[node name="Server" type="Node" parent="."]
+script = ExtResource("2_eiyka")
+
+[node name="StartClient" type="Button" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 197.0
+offset_bottom = 65.0
+text = "Start Client"
+
+[node name="StartServer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 932.0
+offset_top = 25.0
+offset_right = 1103.0
+offset_bottom = 56.0
+text = "Start Server"
+
+[node name="TestPacketClient" type="Button" parent="."]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 100.0
+offset_right = 183.0
+offset_bottom = 131.0
+scale = Vector2(1, 0.993134)
+text = "Start Game"
+
+[node name="TestPacketServer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 948.0
+offset_top = 88.0
+offset_right = 1087.0
+offset_bottom = 119.0
+text = "Send Test Packet"
+
+[node name="JoinToMatch" type="Button" parent="."]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 169.0
+offset_right = 175.0
+offset_bottom = 200.0
+scale = Vector2(0.982081, 1)
+text = "Join to a Match"
+
+[connection signal="button_down" from="StartClient" to="Client" method="_on_start_client_button_down"]
+[connection signal="button_down" from="StartServer" to="Server" method="_on_start_server_button_down"]
+[connection signal="button_down" from="TestPacketClient" to="Client" method="_on_test_packet_button_down"]
+[connection signal="button_down" from="TestPacketServer" to="Server" method="_on_test_packet_server_button_down"]
+[connection signal="button_down" from="JoinToMatch" to="Client" method="_on_join_to_match_button_down"]

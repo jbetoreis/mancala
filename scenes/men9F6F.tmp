@@ -1,0 +1,128 @@
+[gd_scene load_steps=2 format=3 uid="uid://bloq2pfo3b0pu"]
+
+[sub_resource type="GDScript" id="GDScript_wkk2g"]
+script/source = "extends Control
+
+
+var server_ip = \"localhost\"
+var port = 7777
+var par = null
+
+var server = null
+var next_channel = 1  # Inicie o próximo canal em 1
+
+class MatchData:
+	var player1_id
+	var player2_id
+	var channel
+	
+	func getChannel():
+		return self.channel
+
+var waiting_players = []
+var active_matches = {}
+
+func _ready():
+	var args = Array(OS.get_cmdline_args())
+	if args.has(\"s\"):
+		pass
+
+func create_server():
+	print(\"Starting Server...\")
+	server = ENetMultiplayerPeer.new();
+	server.create_server(7777, 64);
+	multiplayer.multiplayer_peer = server
+
+func peer_disconnected(id):
+	print(\"Jogador desconectado! ID:\", id)
+	waiting_players.erase(id)
+
+func conectado_ao_servidor(id):
+	print(\"Jogador conectado! ID:\", id)
+	waiting_players.append(id)
+
+	# Tenta formar partidas com jogadores existentes
+	while len(waiting_players) >= 2:
+		var player1 = waiting_players.pop_front()
+		var player2 = waiting_players.pop_front()
+		
+		start_match(player1, player2)
+
+func start_match(player1_id, player2_id):
+	print(\"Iniciando partida entre os jogadores:\", player1_id, \" e \", player2_id)
+
+	var match_data = MatchData.new()
+	match_data.player1_id = player1_id
+	match_data.player2_id = player2_id
+	match_data.channel = next_channel
+
+	# Adiciona a partida à lista de partidas ativas
+	active_matches[next_channel] = match_data
+	next_channel += 1
+	
+	rpc_id(player1_id, \"definir_canal\", match_data.channel)
+	rpc_id(player2_id, \"definir_canal\", match_data.channel)
+	rpc_id(player1_id, \"liberar_turno\")
+
+@rpc(\"reliable\")
+func partida_iniciada(channel):
+	print(active_matches[channel])
+
+func connect_to_server():
+	par = ENetMultiplayerPeer.new();
+	par.create_client(server_ip, port);
+	multiplayer.multiplayer_peer = par;
+
+@rpc(\"reliable\")
+func definir_canal(channel):
+	DadosBase.my_channel = channel
+	print(\"Canal atribuído:\", channel)
+	get_tree().change_scene_to_file(\"res://scenes/cena.tscn\");
+
+
+
+func _on_button_pressed():
+	connect_to_server()
+
+
+func _on_button_2_pressed():
+	multiplayer.peer_connected.connect(self.conectado_ao_servidor);
+	multiplayer.peer_disconnected.connect(self.peer_disconnected);
+	create_server();
+"
+
+[node name="menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_wkk2g")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -36.0
+offset_right = 1.0
+offset_bottom = -4.99997
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.08, 2.08)
+text = "Buscar Partida"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 526.0
+offset_top = 408.0
+offset_right = 651.0
+offset_bottom = 439.0
+text = "Iniciar Servidor"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
