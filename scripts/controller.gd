@@ -186,6 +186,15 @@ func distribuir_sementes(casa_selecionada, jogador):
 	var i = casa_selecionada + 1;
 	var timer = 0.6;
 	while i <= 13:
+		var jogador_alvo = jogador1;
+		if is_remote:
+			jogador_alvo = jogador2;
+		if tabuleiro[i]["chave"] == "kalla" and tabuleiro[i]["jogador"]["id"] != jogador_alvo["id"]:  # Semente não deve cair na kalla adversária
+			if i == 13:
+				i = 0;
+			else:
+				i += 1;
+			continue;
 		var posicao_destino = tabuleiro[i]["posicao"].position
 		tabuleiro[casa_selecionada]["sementes"][-1].mover_para(posicao_destino)
 		var ultima_semente = tabuleiro[casa_selecionada]["sementes"].pop_back()
@@ -198,7 +207,8 @@ func distribuir_sementes(casa_selecionada, jogador):
 		
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
-				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and !is_remote:
+				var casa_oposta = tabuleiro[i]["casa_oposta"];
+				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and tabuleiro[casa_oposta]["sementes"].size() > 0 and !is_remote:
 					await rpc("capturarSementes", i)
 				
 				if is_remote:
@@ -216,7 +226,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 			break
 		elif i == 13: # Ainda falta sementes para distribuir
 			i = 0;
-			continue
+			continue;
 		i += 1;
 	
 	tabuleiro[casa_selecionada]["total_sementes"] = 0;
@@ -224,7 +234,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 func montar_tabuleiro():
 	for casa in tabuleiro:
 		if casa["chave"] == "buraco":
-			for i in range(1):
+			for i in range(10):
 				var semente = pre_semente.instantiate()
 				get_tree().root.get_node("Cena/Tabuleiro").add_child(semente)
 				
