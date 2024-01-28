@@ -198,7 +198,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 		
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
-				if tabuleiro[i]["total_sementes"] <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and !is_remote:
+				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and !is_remote:
 					await rpc("capturarSementes", i)
 				
 				if is_remote:
@@ -210,6 +210,9 @@ func distribuir_sementes(casa_selecionada, jogador):
 					turno_atual["jogadas"] = 0
 				else:
 					turno_atual["jogadas"] = 1
+			if VerificarMinhasSementes() <= 0:
+				turno_atual["jogadas"] = 0
+				await rpc("RetornarSementes");
 			break
 		elif i == 13: # Ainda falta sementes para distribuir
 			i = 0;
@@ -221,7 +224,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 func montar_tabuleiro():
 	for casa in tabuleiro:
 		if casa["chave"] == "buraco":
-			for i in range(4):
+			for i in range(1):
 				var semente = pre_semente.instantiate()
 				get_tree().root.get_node("Cena/Tabuleiro").add_child(semente)
 				
@@ -260,6 +263,22 @@ func capturarSementes(casa):
 	await guardarSementes(casa, posicao_destino, kalla);
 	await guardarSementes(casa_oposta, posicao_destino, kalla);
 
+
+@rpc("any_peer", "call_local")
+func RetornarSementes():
+	var is_remote = multiplayer.get_remote_sender_id() != multiplayer.get_unique_id();
+	var kalla = tabuleiro[13];
+	var jogador = jogador2;
+	if is_remote:
+		kalla = tabuleiro[6];
+		jogador = jogador1;
+		
+	var posicao_destino = kalla["posicao"].position;
+	for i in range(tabuleiro.size()):
+		if tabuleiro[i]["jogador"]["id"] == jogador["id"] && tabuleiro[i]["chave"] == "buraco":
+			guardarSementes(i, posicao_destino, kalla);
+
+
 func guardarSementes(casa, posicao_destino, kalla_destino):
 	for i in range(tabuleiro[casa]["sementes"].size()):
 		tabuleiro[casa]["sementes"][-1].mover_para(posicao_destino);
@@ -271,3 +290,10 @@ func guardarSementes(casa, posicao_destino, kalla_destino):
 		tabuleiro[casa]["indicador"].decrementar();
 		
 		await get_tree().create_timer(0.5).timeout;
+
+func VerificarMinhasSementes():
+	var total_sementes = 0;
+	for casa in tabuleiro:
+		if casa["jogador"]["id"] == turno_atual["jogador"]["id"] && casa["chave"] == "buraco":
+			total_sementes += casa["sementes"].size()
+	return total_sementes;
