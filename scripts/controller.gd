@@ -6,12 +6,14 @@ var jogador1 = {
 	"indicador": 1,
 	"id": 1,
 	"pontuacao": 0,
+	"perfil": null
 }
 
 var jogador2 = {
 	"indicador": 2,
 	"id": 2,
 	"pontuacao": 0,
+	"perfil": null
 }
 
 var turno_atual = {
@@ -23,9 +25,14 @@ var tabuleiro = []
 var casas_opostas = []
 
 func _ready():
+	jogador1["perfil"] = $CanvasLayer/Perfil1;
+	jogador2["perfil"] = $CanvasLayer/Perfil2;
 	var meu_id = multiplayer.get_unique_id();
 	if GameManager.Players[str(meu_id)]["index"] == 1:
 		turno_atual["jogadas"] = 1;
+		jogador1["perfil"].startThink();
+	else:
+		jogador2["perfil"].startThink();
 	
 	tabuleiro = [
 		{
@@ -213,13 +220,23 @@ func distribuir_sementes(casa_selecionada, jogador):
 				
 				if is_remote:
 					turno_atual["jogadas"] = 1
+					MensagemNovaJogada();
+					jogador1["perfil"].startThink()
+					jogador2["perfil"].stopThink()
 				else:
 					turno_atual["jogadas"] = 0
+					jogador1["perfil"].stopThink()
+					jogador2["perfil"].startThink()
 			else:
 				if is_remote:
 					turno_atual["jogadas"] = 0
+					jogador1["perfil"].stopThink()
+					jogador2["perfil"].startThink()
 				else:
 					turno_atual["jogadas"] = 1
+					MensagemNovaJogada();
+					jogador1["perfil"].startThink()
+					jogador2["perfil"].stopThink()
 			if VerificarMinhasSementes() <= 0:
 				turno_atual["jogadas"] = 0
 				await rpc("RetornarSementes");
@@ -234,7 +251,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 func montar_tabuleiro():
 	for casa in tabuleiro:
 		if casa["chave"] == "buraco":
-			for i in range(10):
+			for i in range(4):
 				var semente = pre_semente.instantiate()
 				get_tree().root.get_node("Cena/Tabuleiro").add_child(semente)
 				
@@ -307,3 +324,7 @@ func VerificarMinhasSementes():
 		if casa["jogador"]["id"] == turno_atual["jogador"]["id"] && casa["chave"] == "buraco":
 			total_sementes += casa["sementes"].size()
 	return total_sementes;
+
+func MensagemNovaJogada():
+	$CanvasLayer/Mensagem.setMessage("Sua Vez!");
+	$CanvasLayer/Mensagem.disparar_mensagem();

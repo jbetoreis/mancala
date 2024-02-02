@@ -1,12 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8tsgkh5vh6ju"]
+[gd_scene load_steps=7 format=3 uid="uid://b8tsgkh5vh6ju"]
 
 [ext_resource type="Script" path="res://scripts/controller.gd" id="1_n2u1v"]
 [ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="2_tbn0c"]
 [ext_resource type="Texture2D" uid="uid://cs7lawsjlsa1v" path="res://assets/tabuleiro.png" id="2_w3050"]
+[ext_resource type="PackedScene" uid="uid://bn778bd7q3d3f" path="res://scenes/perfil.tscn" id="3_elx7e"]
 [ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="3_pj5ji"]
+[ext_resource type="PackedScene" uid="uid://cdvcsiq7kbisa" path="res://scenes/mensagem.tscn" id="5_ha83t"]
 
 [node name="Cena" type="Node2D"]
 script = ExtResource("1_n2u1v")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Mensagem" parent="CanvasLayer" instance=ExtResource("5_ha83t")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Perfil1" parent="CanvasLayer" instance=ExtResource("3_elx7e")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+offset_left = -101.0
+offset_top = -55.0
+offset_right = -101.0
+offset_bottom = -55.0
+grow_horizontal = 0
+grow_vertical = 0
+nome = "Você"
+orientacao = 0
+
+[node name="Perfil2" parent="CanvasLayer" instance=ExtResource("3_elx7e")]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
+nome = "Adversário"
 
 [node name="Tabuleiro" type="Node2D" parent="."]
 position = Vector2(544, 312)
