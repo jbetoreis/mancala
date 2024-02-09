@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://bapcgogbn6dxe"]
 
-[ext_resource type="Texture2D" uid="uid://dvkwdyi7snyvl" path="res://assets/IndicadorDePontos.png" id="1_ktub4"]
 [ext_resource type="Script" path="res://scripts/indicador_de_pontos.gd" id="1_l17ay"]
+[ext_resource type="Texture2D" uid="uid://bs1rnsvpyoab6" path="res://assets/PointsPlate.png" id="2_mdnl7"]
 
 [node name="IndicadorDePontos" type="Node2D"]
 scale = Vector2(1.5, 1.5)
 script = ExtResource("1_l17ay")
 
 [node name="Sprite" type="Sprite2D" parent="."]
-scale = Vector2(1.00978, 1)
-texture = ExtResource("1_ktub4")
+scale = Vector2(0.075, 0.074)
+texture = ExtResource("2_mdnl7")
 
 [node name="Indicador" type="Label" parent="."]
 anchors_preset = 8

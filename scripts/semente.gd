@@ -4,6 +4,7 @@ var semeando = false;
 var target_position = Vector2()
 var speed = 0
 var move = Vector2();
+var texturas = ["res://assets/BlueStone.png", "res://assets/RedStone.png", "res://assets/CyanStone.png", "res://assets/GreenStone.png"]
 
 func _process(delta):
 	if semeando:
@@ -22,3 +23,6 @@ func mover_para(destino):
 	semeando = true
 	speed = 800
 	target_position = destino
+
+func DefineTexture(index):
+	$Sprite.texture = load(texturas[index]);

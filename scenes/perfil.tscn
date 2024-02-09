@@ -4,6 +4,21 @@
 [ext_resource type="Texture2D" uid="uid://eytlp06nbixy" path="res://assets/PlayerIcon.png" id="1_q7qj1"]
 [ext_resource type="Texture2D" uid="uid://cm8lb4ltw2yyb" path="res://assets/PlayerThink.png" id="3_l33re"]
 
+[sub_resource type="Animation" id="Animation_ga8jm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerThink:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
 [sub_resource type="Animation" id="Animation_3ga8n"]
 resource_name = "Thinking"
 loop_mode = 1
@@ -18,21 +33,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 6.28319]
-}
-
-[sub_resource type="Animation" id="Animation_ga8jm"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerThink:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1xx0m"]
@@ -52,8 +52,8 @@ script = ExtResource("1_n111a")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 51.0
+offset_bottom = 55.0
 theme_override_constants/separation = 10
 alignment = 1
 

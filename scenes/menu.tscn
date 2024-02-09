@@ -40,6 +40,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 20
 
+[node name="BtnFindMatch" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Buscar Partida"
+
 [node name="BtnCriarEntrar" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
@@ -58,5 +63,6 @@ text = "Começar Jogo"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[connection signal="button_down" from="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/BtnFindMatch" to="." method="_on_btn_find_match_button_down"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/BtnCriarEntrar" to="." method="_on_btn_criar_entrar_button_down"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/BtnStartMatch" to="." method="_on_btn_start_match_button_down"]

@@ -177,7 +177,8 @@ func _ready():
 	montar_tabuleiro()
 
 func _process(delta):
-	pass
+	if Input.get_action_strength("ui_home"):
+		get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
 @rpc("any_peer","call_local")
 func distribuir_sementes(casa_selecionada, jogador):
@@ -202,20 +203,24 @@ func distribuir_sementes(casa_selecionada, jogador):
 			else:
 				i += 1;
 			continue;
-		var posicao_destino = tabuleiro[i]["posicao"].position
-		tabuleiro[casa_selecionada]["sementes"][-1].mover_para(posicao_destino)
-		var ultima_semente = tabuleiro[casa_selecionada]["sementes"].pop_back()
-		sementes_casa = tabuleiro[casa_selecionada]["sementes"].size()
-		tabuleiro[i]["sementes"].append(ultima_semente)
-		tabuleiro[i]["total_sementes"] += 1
+		var rand_posx = randi_range(-30, 30);
+		var rand_posy = randi_range(-30, 30);
+		var posicao_destino = tabuleiro[i]["posicao"].position + Vector2(rand_posx, rand_posy);
+		tabuleiro[casa_selecionada]["sementes"][-1].mover_para(posicao_destino);
+		var ultima_semente = tabuleiro[casa_selecionada]["sementes"].pop_back();
+		sementes_casa = tabuleiro[casa_selecionada]["sementes"].size();
+		tabuleiro[i]["sementes"].append(ultima_semente);
+		tabuleiro[i]["total_sementes"] += 1;
 		tabuleiro[i]["indicador"].incrementar();
-		tabuleiro[casa_selecionada]["indicador"].decrementar()
-		await get_tree().create_timer(timer).timeout
+		tabuleiro[casa_selecionada]["indicador"].decrementar();
+		await get_tree().create_timer(timer).timeout;
 		
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
 				var casa_oposta = tabuleiro[i]["casa_oposta"];
+				print("Opa")
 				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and tabuleiro[casa_oposta]["sementes"].size() > 0 and !is_remote:
+					print("Capturar")
 					await rpc("capturarSementes", i)
 				
 				if is_remote:
@@ -237,7 +242,9 @@ func distribuir_sementes(casa_selecionada, jogador):
 					MensagemNovaJogada();
 					jogador1["perfil"].startThink()
 					jogador2["perfil"].stopThink()
+			print("Opa2")
 			if VerificarMinhasSementes() <= 0:
+				print("Opa3")
 				turno_atual["jogadas"] = 0
 				await rpc("RetornarSementes");
 			break
@@ -255,9 +262,10 @@ func montar_tabuleiro():
 				var semente = pre_semente.instantiate()
 				get_tree().root.get_node("Cena/Tabuleiro").add_child(semente)
 				
-				var offset_x = randi_range(-30, 30)
-				var offset_y = randi_range(-30, 30)
+				var offset_x = randi_range(-25, 25)
+				var offset_y = randi_range(-25, 25)
 				semente.position = casa["posicao"].position + Vector2(offset_x, offset_y)
+				semente.DefineTexture(i - 1);
 				casa["sementes"].append(semente)
 			casa["indicador"].setValor(4)
 
@@ -308,7 +316,10 @@ func RetornarSementes():
 
 func guardarSementes(casa, posicao_destino, kalla_destino):
 	for i in range(tabuleiro[casa]["sementes"].size()):
-		tabuleiro[casa]["sementes"][-1].mover_para(posicao_destino);
+		var rand_posx = randi_range(-30, 30);
+		var rand_posy = randi_range(-75, 75);
+		var posicao_kalla = posicao_destino + Vector2(rand_posx, rand_posy)
+		tabuleiro[casa]["sementes"][-1].mover_para(posicao_kalla);
 		
 		var ultima_semente = tabuleiro[casa]["sementes"].pop_back();
 		kalla_destino["sementes"].append(ultima_semente);

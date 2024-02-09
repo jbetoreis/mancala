@@ -11,7 +11,9 @@ enum Message{
 	offer,
 	answer,
 	check,
-	removeLobby
+	removeLobby,
+	findMatch,
+	ableMatch
 }
 
 var peer = WebSocketMultiplayerPeer.new()
@@ -19,6 +21,7 @@ var id = 0
 var rtcPeer : WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
 var hostId:int
 var lobbyValue = ""
+var ableToMatch = false;
 
 func _ready():
 	connectToServer("")
@@ -33,6 +36,9 @@ func RTCServerConnected():
 
 func RTCPeerConnected(id):
 	print("rtc peer connected " + str(id))
+	if ableToMatch:
+		ableToMatch = false;
+		StartGame.rpc();
 	
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
@@ -67,6 +73,8 @@ func _process(delta):
 			if data.message == Message.answer:
 				if rtcPeer.has_peer(data.orgPeer):
 					rtcPeer.get_peer(data.orgPeer).connection.set_remote_description("answer", data.data)
+			if data.message == Message.ableMatch:
+				ableToMatch = true;
 
 
 func connected(id):
@@ -137,12 +145,12 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func connectToServer(ip):
-	peer.create_client("ws://3.88.204.95:8915")
+	peer.create_client("ws://127.0.0.1:8915")
 	print("Cliente iniciado")
 
 
 func _on_btn_start_match_button_down():
-	StartGame.rpc()
+	StartGame.rpc();
 
 @rpc("any_peer", "call_local")
 func StartGame():
@@ -160,5 +168,15 @@ func _on_btn_criar_entrar_button_down():
 		"name": "",
 		"message": Message.lobby,
 		"lobbdyValue": $MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/CodigoPartida.text
+	}
+	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+
+func _on_btn_find_match_button_down():
+	var message = {
+		"id": id,
+		"name": "",
+		"message": Message.findMatch,
+		"lobbdyValue": ""
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())

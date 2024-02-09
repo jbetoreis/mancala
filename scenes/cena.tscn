@@ -2,13 +2,14 @@
 
 [ext_resource type="Script" path="res://scripts/controller.gd" id="1_n2u1v"]
 [ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="2_tbn0c"]
-[ext_resource type="Texture2D" uid="uid://cs7lawsjlsa1v" path="res://assets/tabuleiro.png" id="2_w3050"]
 [ext_resource type="PackedScene" uid="uid://bn778bd7q3d3f" path="res://scenes/perfil.tscn" id="3_elx7e"]
 [ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="3_pj5ji"]
 [ext_resource type="PackedScene" uid="uid://cdvcsiq7kbisa" path="res://scenes/mensagem.tscn" id="5_ha83t"]
+[ext_resource type="Texture2D" uid="uid://ygnmhpobci81" path="res://assets/TabuleiroNovo.png" id="6_lygje"]
 
 [node name="Cena" type="Node2D"]
 script = ExtResource("1_n2u1v")
+metadata/_edit_horizontal_guides_ = []
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 0
@@ -21,10 +22,10 @@ size_flags_vertical = 3
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
-offset_left = -101.0
-offset_top = -55.0
-offset_right = -101.0
-offset_bottom = -55.0
+offset_left = -131.0
+offset_top = -61.0
+offset_right = -131.0
+offset_bottom = -61.0
 grow_horizontal = 0
 grow_vertical = 0
 nome = "Você"
@@ -37,114 +38,124 @@ offset_right = 8.0
 offset_bottom = 8.0
 nome = "Adversário"
 
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ParallaxBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.211765, 0.266667, 0.313726, 1)
+
 [node name="Tabuleiro" type="Node2D" parent="."]
 position = Vector2(544, 312)
 
 [node name="Casas" type="Node2D" parent="Tabuleiro"]
 
 [node name="Buraco0" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-264, 56)
+position = Vector2(-208, 61)
 skew = -0.0296706
 
 [node name="Buraco1" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-144, 56)
+position = Vector2(-112, 61)
 posicao = 1
 
 [node name="Buraco2" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-24, 56)
+position = Vector2(-15, 61)
 posicao = 2
 
 [node name="Buraco3" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(96, 56)
+position = Vector2(82, 61)
 posicao = 3
 
 [node name="Buraco4" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(208, 56)
+position = Vector2(178, 61)
 posicao = 4
 
 [node name="Buraco5" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(336, 56)
+position = Vector2(275, 63)
 posicao = 5
 
 [node name="Kalla01" type="Marker2D" parent="Tabuleiro/Casas"]
-position = Vector2(463, 7)
+position = Vector2(375, -2)
 
 [node name="Buraco7" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(332, -50)
+position = Vector2(274, -60)
 scale = Vector2(1, 1.01356)
 posicao = 7
 
 [node name="Buraco8" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(208, -49)
+position = Vector2(178, -61)
 posicao = 8
 
 [node name="Buraco9" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(96, -50)
+position = Vector2(82, -60)
 posicao = 9
 
 [node name="Buraco10" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-24, -50)
+position = Vector2(-16, -60)
 posicao = 10
 
 [node name="Buraco11" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-144, -50)
+position = Vector2(-112, -62)
 posicao = 11
 
 [node name="Buraco12" parent="Tabuleiro/Casas" instance=ExtResource("2_tbn0c")]
-position = Vector2(-264, -50)
+position = Vector2(-209, -62)
 posicao = 12
 
 [node name="Kalla02" type="Marker2D" parent="Tabuleiro/Casas"]
-position = Vector2(-398, 3)
+position = Vector2(-307, -4)
 
 [node name="Indicadores" type="Node2D" parent="Tabuleiro"]
 
 [node name="IndicadorDePontos0" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-264, 174)
+position = Vector2(-210, 163)
 
 [node name="IndicadorDePontos1" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-144, 174)
+position = Vector2(-111, 163)
 
 [node name="IndicadorDePontos2" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-24, 174)
+position = Vector2(-15, 163)
 
 [node name="IndicadorDePontos3" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(96, 174)
+position = Vector2(82, 163)
 
 [node name="IndicadorDePontos4" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(208, 174)
+position = Vector2(179, 163)
 
 [node name="IndicadorDePontos5" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(332, 174)
+position = Vector2(275, 163)
 
 [node name="IndicadorDePontos6" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(463, 174)
+position = Vector2(375, 163)
 
 [node name="IndicadorDePontos7" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(332, -173)
+position = Vector2(275, -162)
 
 [node name="IndicadorDePontos8" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(208, -173)
+position = Vector2(179, -162)
 
 [node name="IndicadorDePontos9" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(96, -173)
+position = Vector2(82, -162)
 
 [node name="IndicadorDePontos10" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-24, -173)
+position = Vector2(-16, -162)
 
 [node name="IndicadorDePontos11" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-144, -173)
+position = Vector2(-111, -162)
 
 [node name="IndicadorDePontos12" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-264, -173)
+position = Vector2(-210, -162)
 
 [node name="IndicadorDePontos13" parent="Tabuleiro/Indicadores" instance=ExtResource("3_pj5ji")]
-position = Vector2(-398, -173)
+position = Vector2(-307, -162)
 
 [node name="Sprite" type="Sprite2D" parent="Tabuleiro"]
-position = Vector2(31, 6)
-scale = Vector2(4, 4.04559)
-texture = ExtResource("2_w3050")
+position = Vector2(32, 3)
+scale = Vector2(1, 1.012)
+texture = ExtResource("6_lygje")
 
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco0" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco1" to="." method="_on_buraco_casa_selecionada"]
