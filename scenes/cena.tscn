@@ -14,29 +14,33 @@ metadata/_edit_horizontal_guides_ = []
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 0
 
-[node name="Mensagem" parent="CanvasLayer" instance=ExtResource("5_ha83t")]
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="InfoJogadores" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 140
+theme_override_constants/margin_bottom = 80
 
-[node name="Perfil1" parent="CanvasLayer" instance=ExtResource("3_elx7e")]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-offset_left = -131.0
-offset_top = -61.0
-offset_right = -131.0
-offset_bottom = -61.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="Perfil1" parent="CanvasLayer/InfoJogadores" instance=ExtResource("3_elx7e")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 nome = "Você"
 orientacao = 0
 
-[node name="Perfil2" parent="CanvasLayer" instance=ExtResource("3_elx7e")]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="Perfil2" parent="CanvasLayer/InfoJogadores" instance=ExtResource("3_elx7e")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 nome = "Adversário"
+
+[node name="Mensagem" parent="CanvasLayer" instance=ExtResource("5_ha83t")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
 

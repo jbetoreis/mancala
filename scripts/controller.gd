@@ -25,8 +25,8 @@ var tabuleiro = []
 var casas_opostas = []
 
 func _ready():
-	jogador1["perfil"] = $CanvasLayer/Perfil1;
-	jogador2["perfil"] = $CanvasLayer/Perfil2;
+	jogador1["perfil"] = $CanvasLayer/InfoJogadores/Perfil1;
+	jogador2["perfil"] = $CanvasLayer/InfoJogadores/Perfil2;
 	var meu_id = multiplayer.get_unique_id();
 	if GameManager.Players[str(meu_id)]["index"] == 1:
 		turno_atual["jogadas"] = 1;

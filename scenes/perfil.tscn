@@ -65,9 +65,9 @@ expand_mode = 2
 [node name="PlayerThink" type="TextureRect" parent="HBoxContainer/PlayerIcon"]
 visible = false
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-pivot_offset = Vector2(20, 20)
+offset_right = 55.0
+offset_bottom = 55.0
+pivot_offset = Vector2(28, 28)
 texture = ExtResource("3_l33re")
 expand_mode = 2
 
