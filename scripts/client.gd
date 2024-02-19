@@ -13,6 +13,7 @@ enum Message{
 	check,
 	removeLobby,
 	findMatch,
+	endfindMatch,
 	ableMatch
 }
 
@@ -22,6 +23,9 @@ var rtcPeer : WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
 var hostId:int
 var lobbyValue = ""
 var ableToMatch = false;
+var findingMatch = false;
+@onready var btnFindMatch = $CenterContainer/VBoxContainer/BtnFindMatch;
+var pre_find_label = preload("res://scenes/find_match_timer.tscn");
 
 func _ready():
 	connectToServer("")
@@ -29,7 +33,6 @@ func _ready():
 	multiplayer.connected_to_server.connect(RTCServerConnected)
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
-
 
 func RTCServerConnected():
 	print("RTC server connected")
@@ -145,7 +148,7 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func connectToServer(ip):
-	peer.create_client("ws://3.88.204.95:8915")
+	peer.create_client("ws://127.0.0.1:8915")
 	print("Cliente iniciado")
 
 
@@ -154,6 +157,7 @@ func _on_btn_start_match_button_down():
 
 @rpc("any_peer", "call_local")
 func StartGame():
+	$WaitingMatch.queue_free();
 	var message = {
 		"message": Message.removeLobby,
 		"lobbyId": lobbyValue
@@ -167,16 +171,38 @@ func _on_btn_criar_entrar_button_down():
 		"id": id,
 		"name": "",
 		"message": Message.lobby,
-		"lobbdyValue": $MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/CodigoPartida.text
+		"lobbdyValue": $CenterContainer/VBoxContainer/CodigoPartida.text
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 
 func _on_btn_find_match_button_down():
+	findingMatch = true;
+	btnFindMatch.disabled = true;
+	btnFindMatch.text = "Aguarde...";
+	var p = pre_find_label.instantiate()
+	get_tree().root.get_child(1).get_node("WaitingMatch").add_child(p);
+	#get_tree().root.get_node("WaitingMatch").add_child(p);
+	p.cancelar_busca.connect(CancelarBusca);
 	var message = {
 		"id": id,
 		"name": "",
 		"message": Message.findMatch,
+		"lobbdyValue": ""
+	}
+	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+func CancelarBusca():
+	findingMatch = false;
+	btnFindMatch.disabled = false;
+	btnFindMatch.text = "Buscar Partida";
+	SetEndFindMatch();
+
+func SetEndFindMatch():
+	var message = {
+		"id": id,
+		"name": "",
+		"message": Message.endfindMatch,
 		"lobbdyValue": ""
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())

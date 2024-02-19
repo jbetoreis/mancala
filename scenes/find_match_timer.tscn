@@ -1,0 +1,178 @@
+[gd_scene load_steps=10 format=3 uid="uid://bamhqh8pggqhm"]
+
+[ext_resource type="StyleBox" uid="uid://c01trjkthv1u7" path="res://themes/find_match.tres" id="1_0h6cr"]
+[ext_resource type="Script" path="res://scripts/find_match.gd" id="1_5lptn"]
+[ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="1_cnbgf"]
+[ext_resource type="Texture2D" uid="uid://ddv1jpy00fdp5" path="res://assets/BreakFind.png" id="3_vi1rj"]
+
+[sub_resource type="Theme" id="Theme_v6x7s"]
+Label/styles/normal = ExtResource("1_0h6cr")
+
+[sub_resource type="Animation" id="Animation_y0m1i"]
+resource_name = "Iniciar"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1154, -0.25, 0, 0.25, 0, 845, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(582, -0.25, 0, 0.25, 0, 582, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+
+[sub_resource type="Animation" id="Animation_ui1oc"]
+resource_name = "Encerrar"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(840, -0.25, 0, 0.25, 0, 1154, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(582, -0.25, 0, 0.25, 0, 582, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+
+[sub_resource type="Animation" id="Animation_bde0u"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1154, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(582, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45j7d"]
+_data = {
+"Encerrar": SubResource("Animation_ui1oc"),
+"Iniciar": SubResource("Animation_y0m1i"),
+"RESET": SubResource("Animation_bde0u")
+}
+
+[node name="FindMatchTimer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1154.0
+offset_top = 582.0
+offset_right = 1154.0
+offset_bottom = 582.0
+scale = Vector2(1.01595, 1)
+size_flags_horizontal = 4
+size_flags_vertical = 8
+script = ExtResource("1_5lptn")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_v6x7s")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="FindLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.301961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("1_cnbgf")
+theme_override_font_sizes/font_size = 20
+text = "Buscando Partida -"
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.301961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("1_cnbgf")
+theme_override_font_sizes/font_size = 20
+text = "0:00"
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "        "
+
+[node name="BreakFind" type="TextureButton" parent="MarginContainer/HBoxContainer/Label"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.1926
+offset_top = -20.0
+offset_right = 6.80737
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("3_vi1rj")
+stretch_mode = 3
+
+[node name="BaseFindTime" type="Timer" parent="."]
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Iniciar"
+speed_scale = 2.0
+libraries = {
+"": SubResource("AnimationLibrary_45j7d")
+}
+
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Label/BreakFind" to="." method="_on_break_find_button_up"]
+[connection signal="timeout" from="BaseFindTime" to="." method="_on_base_find_time_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

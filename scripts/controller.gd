@@ -218,7 +218,6 @@ func distribuir_sementes(casa_selecionada, jogador):
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
 				var casa_oposta = tabuleiro[i]["casa_oposta"];
-				print("Opa")
 				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and tabuleiro[casa_oposta]["sementes"].size() > 0 and !is_remote:
 					print("Capturar")
 					await rpc("capturarSementes", i)
@@ -242,9 +241,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 					MensagemNovaJogada();
 					jogador1["perfil"].startThink()
 					jogador2["perfil"].stopThink()
-			print("Opa2")
 			if VerificarMinhasSementes() <= 0:
-				print("Opa3")
 				turno_atual["jogadas"] = 0
 				await rpc("RetornarSementes");
 			break
