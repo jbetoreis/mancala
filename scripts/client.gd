@@ -13,8 +13,7 @@ enum Message{
 	check,
 	removeLobby,
 	findMatch,
-	endfindMatch,
-	ableMatch
+	endfindMatch
 }
 
 var peer = WebSocketMultiplayerPeer.new()
@@ -22,10 +21,13 @@ var id = 0
 var rtcPeer : WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
 var hostId:int
 var lobbyValue = ""
-var ableToMatch = false;
 var findingMatch = false;
 @onready var btnFindMatch = $CenterContainer/VBoxContainer/BtnFindMatch;
 var pre_find_label = preload("res://scenes/find_match_timer.tscn");
+@onready var popupCriar = $PopupCriarPartida;
+@onready var popupEntrar = $PopupEntrarPartida;
+@onready var codeNewMatch = $PopupCriarPartida/Control/CenterContainer/VBoxContainer/Code;
+@onready var codeEntryMatch = $PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CodeMatch;
 
 func _ready():
 	connectToServer("")
@@ -39,9 +41,7 @@ func RTCServerConnected():
 
 func RTCPeerConnected(id):
 	print("rtc peer connected " + str(id))
-	if ableToMatch:
-		ableToMatch = false;
-		StartGame.rpc();
+	StartGame.rpc();
 	
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
@@ -66,7 +66,8 @@ func _process(delta):
 				GameManager.Players = JSON.parse_string(data.players)
 				hostId = data.host
 				lobbyValue = data.lobbyValue
-			if data.message == Message.candidate:
+				codeNewMatch.text = "Código: " + str(lobbyValue);
+			if data.message == Message.candidate: 
 				if rtcPeer.has_peer(data.orgPeer):
 					print("Candidato definido: " + str(data.orgPeer) + " Meu id é " + str(id))
 					rtcPeer.get_peer(data.orgPeer).connection.add_ice_candidate(data.mid, data.index, data.sdp)
@@ -76,8 +77,6 @@ func _process(delta):
 			if data.message == Message.answer:
 				if rtcPeer.has_peer(data.orgPeer):
 					rtcPeer.get_peer(data.orgPeer).connection.set_remote_description("answer", data.data)
-			if data.message == Message.ableMatch:
-				ableToMatch = true;
 
 
 func connected(id):
@@ -152,9 +151,6 @@ func connectToServer(ip):
 	print("Cliente iniciado")
 
 
-func _on_btn_start_match_button_down():
-	StartGame.rpc();
-
 @rpc("any_peer", "call_local")
 func StartGame():
 	$WaitingMatch.queue_free();
@@ -165,24 +161,12 @@ func StartGame():
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 	get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
-
-func _on_btn_criar_entrar_button_down():
-	var message = {
-		"id": id,
-		"name": "",
-		"message": Message.lobby,
-		"lobbdyValue": $CenterContainer/VBoxContainer/CodigoPartida.text
-	}
-	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
-
-
 func _on_btn_find_match_button_down():
 	findingMatch = true;
 	btnFindMatch.disabled = true;
 	btnFindMatch.text = "Aguarde...";
 	var p = pre_find_label.instantiate()
 	get_tree().root.get_child(1).get_node("WaitingMatch").add_child(p);
-	#get_tree().root.get_node("WaitingMatch").add_child(p);
 	p.cancelar_busca.connect(CancelarBusca);
 	var message = {
 		"id": id,
@@ -206,3 +190,44 @@ func SetEndFindMatch():
 		"lobbdyValue": ""
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+
+func _on_btn_criar_partida_button_down():
+	popupCriar.show();
+	initLobby("");
+
+
+func _on_btn_entrar_partida_button_down():
+	popupEntrar.show();
+
+
+func _on_encerrar_lobby_button_up():
+	popupCriar.hide();
+	var message = {
+		"message": Message.removeLobby,
+		"lobbyId": lobbyValue
+	}
+	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+
+func _on_cancel_match_button_up():
+	popupEntrar.hide();
+
+
+func _on_entrar_lobby_button_up():
+	var code = codeEntryMatch.text;
+	if code:
+		initLobby(code);
+
+
+func initLobby(codigo):
+	var message = {
+		"id": id,
+		"name": "",
+		"message": Message.lobby,
+		"lobbdyValue": codigo
+	}
+	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+func _on_popup_entrar_partida_focus_exited():
+	popupEntrar.hide();
