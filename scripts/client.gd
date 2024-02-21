@@ -147,18 +147,14 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func connectToServer(ip):
-	peer.create_client("ws://127.0.0.1:8915")
+	peer.create_client("ws://3.88.204.95:8915")
 	print("Cliente iniciado")
 
 
 @rpc("any_peer", "call_local")
 func StartGame():
 	$WaitingMatch.queue_free();
-	var message = {
-		"message": Message.removeLobby,
-		"lobbyId": lobbyValue
-	}
-	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+	closeLobby();
 	get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
 func _on_btn_find_match_button_down():
@@ -203,11 +199,7 @@ func _on_btn_entrar_partida_button_down():
 
 func _on_encerrar_lobby_button_up():
 	popupCriar.hide();
-	var message = {
-		"message": Message.removeLobby,
-		"lobbyId": lobbyValue
-	}
-	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+	closeLobby();
 
 
 func _on_cancel_match_button_up():
@@ -219,6 +211,19 @@ func _on_entrar_lobby_button_up():
 	if code:
 		initLobby(code);
 
+func _on_popup_entrar_partida_focus_exited():
+	popupEntrar.hide();
+
+func _on_popup_criar_partida_focus_exited():
+	popupCriar.hide();
+	closeLobby();
+
+func closeLobby():
+	var message = {
+		"message": Message.removeLobby,
+		"lobbyId": lobbyValue
+	}
+	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func initLobby(codigo):
 	var message = {
@@ -228,6 +233,3 @@ func initLobby(codigo):
 		"lobbdyValue": codigo
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
-
-func _on_popup_entrar_partida_focus_exited():
-	popupEntrar.hide();

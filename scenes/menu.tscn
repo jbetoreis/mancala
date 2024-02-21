@@ -179,4 +179,5 @@ text = "   Encerrar  "
 [connection signal="focus_exited" from="PopupEntrarPartida" to="." method="_on_popup_entrar_partida_focus_exited"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/EntrarLobby" to="." method="_on_entrar_lobby_button_up"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/CancelMatch" to="." method="_on_cancel_match_button_up"]
+[connection signal="focus_exited" from="PopupCriarPartida" to="." method="_on_popup_criar_partida_focus_exited"]
 [connection signal="button_up" from="PopupCriarPartida/Control/CenterContainer/VBoxContainer/EncerrarLobby" to="." method="_on_encerrar_lobby_button_up"]
