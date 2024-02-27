@@ -23,6 +23,7 @@ var turno_atual = {
 
 var tabuleiro = []
 var casas_opostas = []
+var seed_sec_speed = 0.5
 
 func _ready():
 	jogador1["perfil"] = $CanvasLayer/InfoJogadores/Perfil1;
@@ -218,19 +219,14 @@ func distribuir_sementes(casa_selecionada, jogador):
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
 				var casa_oposta = tabuleiro[i]["casa_oposta"];
-				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[i]["jogador"]["id"] == jogador["id"] and tabuleiro[casa_oposta]["sementes"].size() > 0 and !is_remote:
-					print("Capturar")
-					await rpc("capturarSementes", i)
-				
-				if is_remote:
-					turno_atual["jogadas"] = 1
-					MensagemNovaJogada();
-					jogador1["perfil"].startThink()
-					jogador2["perfil"].stopThink()
+				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[casa_oposta]["sementes"].size() > 0:
+					if !is_remote and tabuleiro[i]["jogador"]["id"] == jogador["id"]:
+						await rpc("capturarSementes", i)
+					elif !is_remote:
+						passar_jogada(is_remote);
+						rpc("passar_jogada_remote")
 				else:
-					turno_atual["jogadas"] = 0
-					jogador1["perfil"].stopThink()
-					jogador2["perfil"].startThink()
+					passar_jogada(is_remote);
 			else:
 				if is_remote:
 					turno_atual["jogadas"] = 0
@@ -251,6 +247,24 @@ func distribuir_sementes(casa_selecionada, jogador):
 		i += 1;
 	
 	tabuleiro[casa_selecionada]["total_sementes"] = 0;
+
+func passar_jogada(is_remote):
+	if is_remote:
+		turno_atual["jogadas"] = 1
+		MensagemNovaJogada();
+		jogador1["perfil"].startThink()
+		jogador2["perfil"].stopThink()
+	else:
+		turno_atual["jogadas"] = 0
+		jogador1["perfil"].stopThink()
+		jogador2["perfil"].startThink()
+
+@rpc("any_peer","call_remote")
+func passar_jogada_remote():
+	turno_atual["jogadas"] = 1
+	MensagemNovaJogada();
+	jogador1["perfil"].startThink()
+	jogador2["perfil"].stopThink()
 
 func montar_tabuleiro():
 	for casa in tabuleiro:
@@ -280,12 +294,8 @@ func capturarSementes(casa):
 	var is_remote = multiplayer.get_remote_sender_id() != multiplayer.get_unique_id();
 	if is_remote:
 		casa = tabuleiro[casa]["casa_adversario"];
-	var timer = 0.5;
 	var casa_oposta = tabuleiro[casa]["casa_oposta"];
 	
-	# var kalla = tabuleiro[6];
-	# if turno_atual["jogador"]["indicador"] == 2:
-	#	kalla = tabuleiro[13];
 	var kalla = tabuleiro[6];
 	if is_remote:
 		kalla = tabuleiro[13];
@@ -293,7 +303,7 @@ func capturarSementes(casa):
 	var posicao_destino = kalla["posicao"].position;
 	
 	await guardarSementes(casa, posicao_destino, kalla);
-	await guardarSementes(casa_oposta, posicao_destino, kalla);
+	await guardarSementes(casa_oposta, posicao_destino, kalla, is_remote, true);
 
 
 @rpc("any_peer", "call_local")
@@ -311,8 +321,9 @@ func RetornarSementes():
 			guardarSementes(i, posicao_destino, kalla);
 
 
-func guardarSementes(casa, posicao_destino, kalla_destino):
-	for i in range(tabuleiro[casa]["sementes"].size()):
+func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, notificacao_termino = false):
+	var seed_amount = tabuleiro[casa]["sementes"].size();
+	for i in range(seed_amount):
 		var rand_posx = randi_range(-30, 30);
 		var rand_posy = randi_range(-75, 75);
 		var posicao_kalla = posicao_destino + Vector2(rand_posx, rand_posy)
@@ -324,7 +335,9 @@ func guardarSementes(casa, posicao_destino, kalla_destino):
 		kalla_destino["indicador"].incrementar();
 		tabuleiro[casa]["indicador"].decrementar();
 		
-		await get_tree().create_timer(0.5).timeout;
+		await get_tree().create_timer(seed_sec_speed).timeout;
+		if i == seed_amount - 1 and notificacao_termino:
+			passar_jogada(is_remote);
 
 func VerificarMinhasSementes():
 	var total_sementes = 0;
