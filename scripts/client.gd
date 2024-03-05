@@ -150,7 +150,6 @@ func connectToServer(ip):
 	peer.create_client("ws://3.88.204.95:8915")
 	print("Cliente iniciado")
 
-
 @rpc("any_peer", "call_local")
 func StartGame():
 	$WaitingMatch.queue_free();

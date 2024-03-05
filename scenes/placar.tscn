@@ -1,0 +1,200 @@
+[gd_scene load_steps=9 format=3 uid="uid://bhg2wufeffx1y"]
+
+[ext_resource type="Script" path="res://scripts/placar.gd" id="1_nfcm5"]
+[ext_resource type="Texture2D" uid="uid://c2k2ev0oc33mf" path="res://assets/Tabuleta.png" id="1_ueofn"]
+[ext_resource type="Texture2D" uid="uid://eytlp06nbixy" path="res://assets/PlayerIcon.png" id="2_niq11"]
+[ext_resource type="Texture2D" uid="uid://dbl3ww3rmnema" path="res://assets/IndicadorWinner.png" id="3_eqlbe"]
+[ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="3_n6tsa"]
+[ext_resource type="Theme" uid="uid://dpbkvgsr6diux" path="res://themes/btn_theme2.theme" id="6_05hoy"]
+[ext_resource type="Texture2D" uid="uid://crtx42d1jcihm" path="res://assets/BalaoNotificacao.png" id="6_rq8co"]
+[ext_resource type="Theme" uid="uid://dcd132n7jihr1" path="res://themes/btn_theme3.theme" id="7_pkfcj"]
+
+[node name="Placar" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+script = ExtResource("1_nfcm5")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -357.0
+offset_top = -174.5
+offset_right = 357.0
+offset_bottom = 174.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Textura" type="TextureRect" parent="CenterContainer"]
+layout_mode = 2
+texture = ExtResource("1_ueofn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Player01Info" type="VBoxContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LabelWinner" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/Player01Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.964706, 0.631373, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="CenterContainer/VBoxContainer/HBoxContainer/Player01Info"]
+layout_mode = 2
+
+[node name="TexturaPerfil" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer/Player01Info/AspectRatioContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("2_niq11")
+expand_mode = 2
+
+[node name="TexturaIndicador" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer/Player01Info/AspectRatioContainer/TexturaPerfil"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_eqlbe")
+expand_mode = 2
+
+[node name="LabelName" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/Player01Info"]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+text = "Você"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PontuacaoPlayer01" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 25
+text = "0"
+
+[node name="LabelVs" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.160784, 0.74902, 0.352941, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+text = "VS"
+
+[node name="PontuacaoPlayer02" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 25
+text = "0"
+
+[node name="Player02Info" type="VBoxContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LabelWinner" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.964706, 0.631373, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info"]
+layout_mode = 2
+
+[node name="TexturaPerfil" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("2_niq11")
+expand_mode = 2
+
+[node name="TexturaIndicador" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer/TexturaPerfil"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_eqlbe")
+expand_mode = 2
+
+[node name="NotificacaoRevanche" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer/TexturaPerfil"]
+visible = false
+layout_mode = 0
+offset_left = 110.0
+offset_top = -9.5
+offset_right = 366.0
+offset_bottom = 118.5
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_rq8co")
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer/TexturaPerfil/NotificacaoRevanche"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.719
+offset_bottom = -0.0320053
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer/TexturaPerfil/NotificacaoRevanche/CenterContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 30
+text = "Revanche?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelName" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/Player02Info"]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+text = "Adversário"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BtnBackToMenu" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("6_05hoy")
+theme_override_fonts/font = ExtResource("3_n6tsa")
+text = "Voltar"
+
+[node name="BtnRepeatGame" type="Button" parent="CenterContainer/VBoxContainer/CenterContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("7_pkfcj")
+theme_override_fonts/font = ExtResource("3_n6tsa")
+text = "Revanche"
+
+[connection signal="button_up" from="CenterContainer/VBoxContainer/CenterContainer/HBoxContainer2/BtnBackToMenu" to="." method="_on_btn_back_to_menu_button_up"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/CenterContainer/HBoxContainer2/BtnRepeatGame" to="." method="_on_btn_repeat_game_button_up"]

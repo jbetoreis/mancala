@@ -1,6 +1,7 @@
 extends Node
 
-var pre_semente = preload("res://scenes/semente.tscn")
+var pre_semente = preload("res://scenes/semente.tscn");
+var pre_placar = preload("res://scenes/placar.tscn");
 
 var jogador1 = {
 	"indicador": 1,
@@ -24,6 +25,8 @@ var turno_atual = {
 var tabuleiro = []
 var casas_opostas = []
 var seed_sec_speed = 0.5
+var placar_final = null
+var revanche_adversario = false;
 
 func _ready():
 	jogador1["perfil"] = $CanvasLayer/InfoJogadores/Perfil1;
@@ -219,27 +222,33 @@ func distribuir_sementes(casa_selecionada, jogador):
 		if sementes_casa <= 0: # Todas as sementes distribuidas
 			if tabuleiro[i]["chave"] != "kalla":  # Regra para jogar mais uma vez
 				var casa_oposta = tabuleiro[i]["casa_oposta"];
-				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[casa_oposta]["sementes"].size() > 0:
-					if !is_remote and tabuleiro[i]["jogador"]["id"] == jogador["id"]:
+				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[casa_oposta]["sementes"].size() > 0:  # Condição para captura
+					if !is_remote and tabuleiro[i]["jogador"]["id"] == jogador["id"]:  # Captura por jogador Authority
 						await rpc("capturarSementes", i)
-					elif !is_remote:
+					elif !is_remote: # Falsa captura por jogador Authority"
+						if VerificarMinhasSementes() <= 0:
+							EncerrarPartida();
+						else:
+							passar_jogada(is_remote);
+							rpc("passar_jogada_remote")
+				else:
+					if VerificarMinhasSementes() <= 0:
+						EncerrarPartida();
+					else:
 						passar_jogada(is_remote);
-						rpc("passar_jogada_remote")
-				else:
-					passar_jogada(is_remote);
 			else:
-				if is_remote:
-					turno_atual["jogadas"] = 0
-					jogador1["perfil"].stopThink()
-					jogador2["perfil"].startThink()
+				if VerificarMinhasSementes() <= 0:
+					EncerrarPartida();
 				else:
-					turno_atual["jogadas"] = 1
-					MensagemNovaJogada();
-					jogador1["perfil"].startThink()
-					jogador2["perfil"].stopThink()
-			if VerificarMinhasSementes() <= 0:
-				turno_atual["jogadas"] = 0
-				await rpc("RetornarSementes");
+					if is_remote:
+						turno_atual["jogadas"] = 0
+						jogador1["perfil"].stopThink()
+						jogador2["perfil"].startThink()
+					else:
+						turno_atual["jogadas"] = 1
+						MensagemNovaJogada();
+						jogador1["perfil"].startThink()
+						jogador2["perfil"].stopThink()
 			break
 		elif i == 13: # Ainda falta sementes para distribuir
 			i = 0;
@@ -319,6 +328,7 @@ func RetornarSementes():
 	for i in range(tabuleiro.size()):
 		if tabuleiro[i]["jogador"]["id"] == jogador["id"] && tabuleiro[i]["chave"] == "buraco":
 			guardarSementes(i, posicao_destino, kalla);
+	ExibirPlacar();
 
 
 func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, notificacao_termino = false):
@@ -337,7 +347,10 @@ func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, no
 		
 		await get_tree().create_timer(seed_sec_speed).timeout;
 		if i == seed_amount - 1 and notificacao_termino:
-			passar_jogada(is_remote);
+			if VerificarMinhasSementes() <= 0:
+				EncerrarPartida();
+			else:
+				passar_jogada(is_remote);
 
 func VerificarMinhasSementes():
 	var total_sementes = 0;
@@ -345,6 +358,54 @@ func VerificarMinhasSementes():
 		if casa["jogador"]["id"] == turno_atual["jogador"]["id"] && casa["chave"] == "buraco":
 			total_sementes += casa["sementes"].size()
 	return total_sementes;
+
+func ExibirPlacar():
+	var placar_jogador1 = tabuleiro[6]["sementes"].size();
+	var placar_jogador2 = tabuleiro[13]["sementes"].size();
+	var vencedor = 1 if placar_jogador1 > placar_jogador2 else 2;
+	
+	var placar = pre_placar.instantiate();
+	get_tree().root.get_node("Cena/CanvasLayer").add_child(placar)
+	placar.position = get_viewport().get_size() / 2
+	placar_final = placar;
+	
+	placar.definirPontuacao(placar_jogador1, placar_jogador2);
+	placar.definirVencedor(vencedor);
+	placar.voltar_menu.connect(VoltarMenu);
+	placar.revanche_signal.connect(RevancheSignal);
+	placar.close_revanche_signal.connect(CloseRevancheSignal);
+
+func RevancheSignal():
+	if revanche_adversario:
+		rpc("IniciarNovoJogo");
+	else:
+		rpc("SolicitarRevanche");
+
+func CloseRevancheSignal():
+	rpc("CancelarRevanche");
+
+@rpc("any_peer", "call_remote")
+func SolicitarRevanche():
+	revanche_adversario = true;
+	placar_final.notificarRevanche();
+
+@rpc("any_peer", "call_remote")
+func CancelarRevanche():
+	revanche_adversario = false;
+	placar_final.ocultarRevanche();
+
+@rpc("any_peer", "call_local")
+func IniciarNovoJogo():
+	get_tree().change_scene_to_file("res://scenes/cena.tscn")
+
+func VoltarMenu():
+	get_tree().change_scene_to_file("res://scenes/menu.tscn");
+
+func EncerrarPartida():
+	turno_atual["jogadas"] = 0;
+	jogador1["perfil"].queue_free()
+	jogador2["perfil"].queue_free()
+	await rpc("RetornarSementes");
 
 func MensagemNovaJogada():
 	$CanvasLayer/Mensagem.setMessage("Sua Vez!");
