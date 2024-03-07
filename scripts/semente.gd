@@ -5,6 +5,7 @@ var target_position = Vector2()
 var speed = 0
 var move = Vector2();
 var texturas = ["res://assets/BlueStone.png", "res://assets/RedStone.png", "res://assets/CyanStone.png", "res://assets/GreenStone.png"]
+@onready var stoneSound = $StoneSound;
 
 func _process(delta):
 	if semeando:
@@ -18,6 +19,7 @@ func _process(delta):
 		if (position - target_position).length() < displacement.length():
 			position = target_position
 			semeando = false;
+			TriggerStoneSound();
 
 func mover_para(destino):
 	semeando = true
@@ -26,3 +28,6 @@ func mover_para(destino):
 
 func DefineTexture(index):
 	$Sprite.texture = load(texturas[index]);
+
+func TriggerStoneSound():
+	stoneSound.play();

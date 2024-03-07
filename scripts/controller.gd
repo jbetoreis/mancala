@@ -33,6 +33,7 @@ func _ready():
 	jogador2["perfil"] = $CanvasLayer/InfoJogadores/Perfil2;
 	var meu_id = multiplayer.get_unique_id();
 	if GameManager.Players[str(meu_id)]["index"] == 1:
+		MensagemTurno("Sua Vez!");
 		turno_atual["jogadas"] = 1;
 		jogador1["perfil"].startThink();
 	else:
@@ -224,6 +225,8 @@ func distribuir_sementes(casa_selecionada, jogador):
 				var casa_oposta = tabuleiro[i]["casa_oposta"];
 				if tabuleiro[i]["sementes"].size() <= 1 and tabuleiro[casa_oposta]["sementes"].size() > 0:  # Condição para captura
 					if !is_remote and tabuleiro[i]["jogador"]["id"] == jogador["id"]:  # Captura por jogador Authority
+						$TurnSound.play();
+						MensagemTurno("Captura!");
 						await rpc("capturarSementes", i)
 					elif !is_remote: # Falsa captura por jogador Authority"
 						if VerificarMinhasSementes() <= 0:
@@ -240,13 +243,14 @@ func distribuir_sementes(casa_selecionada, jogador):
 				if VerificarMinhasSementes() <= 0:
 					EncerrarPartida();
 				else:
+					$TurnSound.play();
 					if is_remote:
 						turno_atual["jogadas"] = 0
 						jogador1["perfil"].stopThink()
 						jogador2["perfil"].startThink()
 					else:
 						turno_atual["jogadas"] = 1
-						MensagemNovaJogada();
+						MensagemTurno("Sua Vez!");
 						jogador1["perfil"].startThink()
 						jogador2["perfil"].stopThink()
 			break
@@ -260,7 +264,7 @@ func distribuir_sementes(casa_selecionada, jogador):
 func passar_jogada(is_remote):
 	if is_remote:
 		turno_atual["jogadas"] = 1
-		MensagemNovaJogada();
+		MensagemTurno("Sua Vez!");
 		jogador1["perfil"].startThink()
 		jogador2["perfil"].stopThink()
 	else:
@@ -271,7 +275,7 @@ func passar_jogada(is_remote):
 @rpc("any_peer","call_remote")
 func passar_jogada_remote():
 	turno_atual["jogadas"] = 1
-	MensagemNovaJogada();
+	MensagemTurno("Sua Vez!");
 	jogador1["perfil"].startThink()
 	jogador2["perfil"].stopThink()
 
@@ -407,6 +411,6 @@ func EncerrarPartida():
 	jogador2["perfil"].queue_free()
 	await rpc("RetornarSementes");
 
-func MensagemNovaJogada():
-	$CanvasLayer/Mensagem.setMessage("Sua Vez!");
+func MensagemTurno(mensagem):
+	$CanvasLayer/Mensagem.setMessage(mensagem);
 	$CanvasLayer/Mensagem.disparar_mensagem();

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b8tsgkh5vh6ju"]
+[gd_scene load_steps=8 format=3 uid="uid://b8tsgkh5vh6ju"]
 
 [ext_resource type="Script" path="res://scripts/controller.gd" id="1_n2u1v"]
 [ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="2_tbn0c"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="3_pj5ji"]
 [ext_resource type="PackedScene" uid="uid://cdvcsiq7kbisa" path="res://scenes/mensagem.tscn" id="5_ha83t"]
 [ext_resource type="Texture2D" uid="uid://ygnmhpobci81" path="res://assets/TabuleiroNovo.png" id="6_lygje"]
+[ext_resource type="AudioStream" uid="uid://kpbwekr6bc0r" path="res://sounds/TurnSound.wav" id="7_4mcmm"]
 
 [node name="Cena" type="Node2D"]
 script = ExtResource("1_n2u1v")
@@ -160,6 +161,10 @@ position = Vector2(-307, -162)
 position = Vector2(32, 3)
 scale = Vector2(1, 1.012)
 texture = ExtResource("6_lygje")
+
+[node name="TurnSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_4mcmm")
+volume_db = 15.0
 
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco0" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco1" to="." method="_on_buraco_casa_selecionada"]

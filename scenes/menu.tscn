@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bloq2pfo3b0pu"]
+[gd_scene load_steps=7 format=3 uid="uid://bloq2pfo3b0pu"]
 
 [ext_resource type="Script" path="res://scripts/client.gd" id="1_7ytio"]
 [ext_resource type="Theme" uid="uid://qhak1gp78ktt" path="res://themes/btn_theme.theme" id="2_rbdju"]
 [ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="3_e0u6n"]
+[ext_resource type="AudioStream" uid="uid://brfves40jeqn0" path="res://sounds/ButtonSound.wav" id="4_ym0st"]
 
 [sub_resource type="Gradient" id="Gradient_n1ela"]
 offsets = PackedFloat32Array(0, 0.217125, 0.636086, 0.721713, 0.856269)
@@ -95,6 +96,14 @@ theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("3_e0u6n")
 theme_override_font_sizes/font_size = 25
 text = "Entrar em Partida"
+
+[node name="BtnFecharJogo" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 25
+text = "Sair do Jogo"
 
 [node name="PopupEntrarPartida" type="Window" parent="."]
 title = "Entrar em partida"
@@ -194,9 +203,14 @@ size_flags_horizontal = 4
 theme = ExtResource("2_rbdju")
 text = "   Encerrar  "
 
+[node name="ButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ym0st")
+volume_db = 10.0
+
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnFindMatch" to="." method="_on_btn_find_match_button_down"]
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnCriarPartida" to="." method="_on_btn_criar_partida_button_down"]
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnEntrarPartida" to="." method="_on_btn_entrar_partida_button_down"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/BtnFecharJogo" to="." method="_on_btn_fechar_jogo_button_up"]
 [connection signal="focus_exited" from="PopupEntrarPartida" to="." method="_on_popup_entrar_partida_focus_exited"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/EntrarLobby" to="." method="_on_entrar_lobby_button_up"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/CancelMatch" to="." method="_on_cancel_match_button_up"]

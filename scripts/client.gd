@@ -157,6 +157,7 @@ func StartGame():
 	get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
 func _on_btn_find_match_button_down():
+	ButtonSound();
 	findingMatch = true;
 	btnFindMatch.disabled = true;
 	btnFindMatch.text = "Aguarde...";
@@ -188,24 +189,29 @@ func SetEndFindMatch():
 
 
 func _on_btn_criar_partida_button_down():
+	ButtonSound()
 	popupCriar.show();
 	initLobby("");
 
 
 func _on_btn_entrar_partida_button_down():
+	ButtonSound()
 	popupEntrar.show();
 
 
 func _on_encerrar_lobby_button_up():
+	ButtonSound()
 	popupCriar.hide();
 	closeLobby();
 
 
 func _on_cancel_match_button_up():
+	ButtonSound()
 	popupEntrar.hide();
 
 
 func _on_entrar_lobby_button_up():
+	ButtonSound()
 	var code = codeEntryMatch.text;
 	if code:
 		initLobby(code);
@@ -232,3 +238,10 @@ func initLobby(codigo):
 		"lobbdyValue": codigo
 	}
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+
+func ButtonSound():
+	$ButtonSound.play();
+
+
+func _on_btn_fechar_jogo_button_up():
+	get_tree().quit();
