@@ -37,6 +37,15 @@ texture = ExtResource("1_ueofn")
 layout_mode = 2
 theme_override_constants/separation = 20
 
+[node name="LabelExtraInfo" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_n6tsa")
+theme_override_font_sizes/font_size = 20
+text = "Vitória por abandono"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10

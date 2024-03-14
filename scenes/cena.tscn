@@ -1,12 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8tsgkh5vh6ju"]
+[gd_scene load_steps=12 format=3 uid="uid://b8tsgkh5vh6ju"]
 
 [ext_resource type="Script" path="res://scripts/controller.gd" id="1_n2u1v"]
 [ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="2_tbn0c"]
 [ext_resource type="PackedScene" uid="uid://bn778bd7q3d3f" path="res://scenes/perfil.tscn" id="3_elx7e"]
 [ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="3_pj5ji"]
+[ext_resource type="Texture2D" uid="uid://c563upejpl123" path="res://assets/MenuIcon.png" id="4_mva0a"]
 [ext_resource type="PackedScene" uid="uid://cdvcsiq7kbisa" path="res://scenes/mensagem.tscn" id="5_ha83t"]
 [ext_resource type="Texture2D" uid="uid://ygnmhpobci81" path="res://assets/TabuleiroNovo.png" id="6_lygje"]
 [ext_resource type="AudioStream" uid="uid://kpbwekr6bc0r" path="res://sounds/TurnSound.wav" id="7_4mcmm"]
+[ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="9_o1k51"]
+[ext_resource type="Theme" uid="uid://1c425rfubkoy" path="res://themes/btn_confirm_theme.theme" id="10_c3dhm"]
+[ext_resource type="Theme" uid="uid://dpbkvgsr6diux" path="res://themes/btn_theme2.theme" id="11_rg7k4"]
 
 [node name="Cena" type="Node2D"]
 script = ExtResource("1_n2u1v")
@@ -52,6 +56,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.211765, 0.266667, 0.313726, 1)
+
+[node name="MenuButton" type="MenuButton" parent="CanvasLayer"]
+offset_left = 1093.0
+offset_top = 10.0
+offset_right = 1133.0
+offset_bottom = 50.0
+scale = Vector2(1.2, 1.2)
+icon = ExtResource("4_mva0a")
+item_count = 1
+popup/item_0/text = "Sair"
+popup/item_0/id = 0
 
 [node name="Tabuleiro" type="Node2D" parent="."]
 position = Vector2(544, 312)
@@ -166,6 +181,59 @@ texture = ExtResource("6_lygje")
 stream = ExtResource("7_4mcmm")
 volume_db = 15.0
 
+[node name="ModalConfirmacao" type="Window" parent="."]
+title = "Sair da Partida"
+initial_position = 1
+size = Vector2i(400, 100)
+visible = false
+theme_override_fonts/title_font = ExtResource("9_o1k51")
+
+[node name="Control" type="Control" parent="ModalConfirmacao"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="ModalConfirmacao/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ModalConfirmacao/Control/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MessageLabel" type="Label" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_o1k51")
+text = "Desejar confirmar esta ação?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BtnConfirmar" type="Button" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("10_c3dhm")
+theme_override_fonts/font = ExtResource("9_o1k51")
+text = "Confirmar"
+
+[node name="BtnFechar" type="Button" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("11_rg7k4")
+theme_override_fonts/font = ExtResource("9_o1k51")
+text = "Fechar"
+
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco0" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco1" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco2" to="." method="_on_buraco_casa_selecionada"]
@@ -178,3 +246,6 @@ volume_db = 15.0
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco10" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco11" to="." method="_on_buraco_casa_selecionada"]
 [connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco12" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="focus_exited" from="ModalConfirmacao" to="." method="_on_modal_confirmacao_focus_exited"]
+[connection signal="button_up" from="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/BtnConfirmar" to="." method="_on_btn_confirmar_button_up"]
+[connection signal="button_up" from="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/BtnFechar" to="." method="_on_btn_fechar_button_up"]

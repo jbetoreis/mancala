@@ -2,6 +2,8 @@ extends Node
 
 var pre_semente = preload("res://scenes/semente.tscn");
 var pre_placar = preload("res://scenes/placar.tscn");
+@onready var BtnMenu = $CanvasLayer/MenuButton;
+@onready var ModalConfirmacao = $ModalConfirmacao;
 
 var jogador1 = {
 	"indicador": 1,
@@ -29,6 +31,8 @@ var placar_final = null
 var revanche_adversario = false;
 
 func _ready():
+	multiplayer.peer_disconnected.connect(RTCPeerDisconnected);
+	
 	jogador1["perfil"] = $CanvasLayer/InfoJogadores/Perfil1;
 	jogador2["perfil"] = $CanvasLayer/InfoJogadores/Perfil2;
 	var meu_id = multiplayer.get_unique_id();
@@ -38,6 +42,8 @@ func _ready():
 		jogador1["perfil"].startThink();
 	else:
 		jogador2["perfil"].startThink();
+	
+	BtnMenu.get_popup().id_pressed.connect(MenuPressed);
 	
 	tabuleiro = [
 		{
@@ -185,6 +191,10 @@ func _process(delta):
 	if Input.get_action_strength("ui_home"):
 		get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
+func RTCPeerDisconnected(id):
+	print("rtc peer disconnected " + str(id))
+	ExibirPlacarAbandono("Vitória por abandono");
+
 @rpc("any_peer","call_local")
 func distribuir_sementes(casa_selecionada, jogador):
 	var is_remote = multiplayer.get_remote_sender_id() != multiplayer.get_unique_id();
@@ -329,13 +339,19 @@ func RetornarSementes():
 		jogador = jogador1;
 		
 	var posicao_destino = kalla["posicao"].position;
-	for i in range(tabuleiro.size()):
+	var casas_tabuleiro = tabuleiro.size();
+	var maximo_sementes = 1;
+	for i in range(casas_tabuleiro):
 		if tabuleiro[i]["jogador"]["id"] == jogador["id"] && tabuleiro[i]["chave"] == "buraco":
+			var sementes_casa = tabuleiro[i]["sementes"].size();
+			if sementes_casa > maximo_sementes:
+				maximo_sementes = sementes_casa;
 			guardarSementes(i, posicao_destino, kalla);
+	await get_tree().create_timer((seed_sec_speed * maximo_sementes) + 0.5).timeout;
 	ExibirPlacar();
 
 
-func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, notificacao_termino = false):
+func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, passar_jogada = false):
 	var seed_amount = tabuleiro[casa]["sementes"].size();
 	for i in range(seed_amount):
 		var rand_posx = randi_range(-30, 30);
@@ -350,18 +366,36 @@ func guardarSementes(casa, posicao_destino, kalla_destino, is_remote = false, no
 		tabuleiro[casa]["indicador"].decrementar();
 		
 		await get_tree().create_timer(seed_sec_speed).timeout;
-		if i == seed_amount - 1 and notificacao_termino:
-			if VerificarMinhasSementes() <= 0:
-				EncerrarPartida();
-			else:
-				passar_jogada(is_remote);
+		if i == seed_amount - 1:
+			if passar_jogada:
+				var jogador_id = jogador2["id"] if is_remote else jogador1["id"];
+				if VerificarMinhasSementes() <= 0:
+					EncerrarPartida();
+				else:
+					passar_jogada(is_remote);
 
-func VerificarMinhasSementes():
+func VerificarMinhasSementes(jogador_id = turno_atual["jogador"]["id"]):
 	var total_sementes = 0;
 	for casa in tabuleiro:
-		if casa["jogador"]["id"] == turno_atual["jogador"]["id"] && casa["chave"] == "buraco":
+		if casa["jogador"]["id"] == jogador_id && casa["chave"] == "buraco":
 			total_sementes += casa["sementes"].size()
 	return total_sementes;
+
+func ExibirPlacarAbandono(mensagem):
+	turno_atual["jogadas"] = 0;
+	jogador1["perfil"].visible = false;
+	jogador2["perfil"].visible = false;
+	
+	var placar = pre_placar.instantiate();
+	get_tree().root.get_node("Cena/CanvasLayer").add_child(placar)
+	placar.position = get_viewport().get_visible_rect().size / 2
+	placar_final = placar;
+	
+	placar.definirPontuacao("", "");
+	placar.setExtraInfo(mensagem);
+	placar.voltar_menu.connect(VoltarMenu);
+	placar.revanche_signal.connect(RevancheSignal);
+	placar.close_revanche_signal.connect(CloseRevancheSignal);
 
 func ExibirPlacar():
 	var placar_jogador1 = tabuleiro[6]["sementes"].size();
@@ -370,7 +404,7 @@ func ExibirPlacar():
 	
 	var placar = pre_placar.instantiate();
 	get_tree().root.get_node("Cena/CanvasLayer").add_child(placar)
-	placar.position = get_viewport().get_size() / 2
+	placar.position = get_viewport().get_visible_rect().size / 2
 	placar_final = placar;
 	
 	placar.definirPontuacao(placar_jogador1, placar_jogador2);
@@ -407,10 +441,25 @@ func VoltarMenu():
 
 func EncerrarPartida():
 	turno_atual["jogadas"] = 0;
-	jogador1["perfil"].queue_free()
-	jogador2["perfil"].queue_free()
+	jogador1["perfil"].visible = false;
+	jogador2["perfil"].visible = false;
 	await rpc("RetornarSementes");
 
 func MensagemTurno(mensagem):
 	$CanvasLayer/Mensagem.setMessage(mensagem);
 	$CanvasLayer/Mensagem.disparar_mensagem();
+
+
+func MenuPressed(id):
+	if id == 0:  # Sair
+		ModalConfirmacao.show();
+
+func _on_modal_confirmacao_focus_exited():
+	ModalConfirmacao.hide();
+
+func _on_btn_confirmar_button_up():
+	ModalConfirmacao.hide();
+	VoltarMenu();
+
+func _on_btn_fechar_button_up():
+	ModalConfirmacao.hide();

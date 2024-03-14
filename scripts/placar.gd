@@ -7,6 +7,7 @@ extends Control
 @onready var pontuacao_jogador2 = $CenterContainer/VBoxContainer/HBoxContainer/PontuacaoPlayer02;
 @onready var btn_revanche = $CenterContainer/VBoxContainer/CenterContainer/HBoxContainer2/BtnRepeatGame;
 @onready var notificacao_revanche = $CenterContainer/VBoxContainer/HBoxContainer/Player02Info/AspectRatioContainer/TexturaPerfil/NotificacaoRevanche;
+@onready var LabelExtraInfo = $CenterContainer/VBoxContainer/LabelExtraInfo;
 
 signal voltar_menu;
 signal revanche_signal;
@@ -37,6 +38,9 @@ func ocultarRevanche():
 func _on_btn_back_to_menu_button_up():
 	emit_signal("voltar_menu");
 
+func setExtraInfo(mensagem):
+	LabelExtraInfo.text = str(mensagem);
+	LabelExtraInfo.visible = true;
 
 func _on_btn_repeat_game_button_up():
 	if(!solicitacao_revanche):
