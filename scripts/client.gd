@@ -54,7 +54,6 @@ func _process(delta):
 		if packet != null:
 			var dataString = packet.get_string_from_utf8()
 			var data = JSON.parse_string(dataString)
-			print(data)
 			if data.message == Message.id:
 				id = data.id
 				
@@ -147,7 +146,7 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func connectToServer(ip):
-	peer.create_client("ws://3.88.204.95:8915")
+	peer.create_client("ws://127.0.0.1:8915")
 	print("Cliente iniciado")
 
 @rpc("any_peer", "call_local")
@@ -202,6 +201,9 @@ func _on_btn_entrar_partida_button_down():
 func _on_encerrar_lobby_button_up():
 	ButtonSound()
 	popupCriar.hide();
+	hostId = 0;
+	lobbyValue = "";
+	GameManager.Players = {};
 	closeLobby();
 
 
@@ -221,6 +223,9 @@ func _on_popup_entrar_partida_focus_exited():
 
 func _on_popup_criar_partida_focus_exited():
 	popupCriar.hide();
+	hostId = 0;
+	lobbyValue = "";
+	GameManager.Players = {};
 	closeLobby();
 
 func closeLobby():
