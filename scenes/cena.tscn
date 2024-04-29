@@ -179,7 +179,7 @@ texture = ExtResource("6_lygje")
 
 [node name="TurnSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_4mcmm")
-volume_db = 15.0
+volume_db = 5.0
 
 [node name="ModalConfirmacao" type="Window" parent="."]
 title = "Sair da Partida"

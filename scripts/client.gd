@@ -26,6 +26,7 @@ var findingMatch = false;
 var pre_find_label = preload("res://scenes/find_match_timer.tscn");
 @onready var popupCriar = $PopupCriarPartida;
 @onready var popupEntrar = $PopupEntrarPartida;
+@onready var popupUmJogador = $PopupUmJogador;
 @onready var codeNewMatch = $PopupCriarPartida/Control/CenterContainer/VBoxContainer/Code;
 @onready var codeEntryMatch = $PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CodeMatch;
 
@@ -147,7 +148,7 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func connectToServer(ip):
-	peer.create_client("ws://3.88.204.95:8915")
+	peer.create_client("ws://127.0.0.1:8915")
 	print("Cliente iniciado")
 
 @rpc("any_peer", "call_local")
@@ -253,3 +254,33 @@ func ButtonSound():
 
 func _on_btn_fechar_jogo_button_up():
 	get_tree().quit();
+
+
+func _on_btn_single_player_button_down():
+	ButtonSound()
+	popupUmJogador.show();
+
+func _on_popup_um_jogador_focus_exited():
+	popupUmJogador.hide();
+
+func _on_popup_um_jogador_close_requested():
+	popupUmJogador.hide();
+
+func _on_btn_new_room_button_up():
+	GameManager.ModoJogo = "Offline"
+	get_tree().change_scene_to_file("res://scenes/cena_off.tscn");
+
+
+func _on_btn_level_1_button_up():
+	GameManager.ModoJogo = "Nivel1"
+	get_tree().change_scene_to_file("res://scenes/cena_off.tscn");
+
+
+func _on_btn_level_2_button_up():
+	GameManager.ModoJogo = "Nivel2"
+	get_tree().change_scene_to_file("res://scenes/cena_off.tscn");
+
+
+func _on_btn_level_3_button_up():
+	GameManager.ModoJogo = "Nivel3"
+	get_tree().change_scene_to_file("res://scenes/cena_off.tscn");

@@ -187,9 +187,6 @@ func _ready():
 	
 	montar_tabuleiro()
 
-func _process(delta):
-	if Input.get_action_strength("ui_home"):
-		get_tree().change_scene_to_file("res://scenes/cena.tscn")
 
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))

@@ -1,0 +1,251 @@
+[gd_scene load_steps=12 format=3 uid="uid://cj2n3irnvb6iy"]
+
+[ext_resource type="Script" path="res://scripts/controller_off.gd" id="1_0p23o"]
+[ext_resource type="PackedScene" uid="uid://bn778bd7q3d3f" path="res://scenes/perfil.tscn" id="2_w78kg"]
+[ext_resource type="PackedScene" uid="uid://cdvcsiq7kbisa" path="res://scenes/mensagem.tscn" id="3_0kscw"]
+[ext_resource type="Texture2D" uid="uid://c563upejpl123" path="res://assets/MenuIcon.png" id="4_33vco"]
+[ext_resource type="PackedScene" uid="uid://4uvgcugtokqx" path="res://scenes/buraco.tscn" id="5_nxe7d"]
+[ext_resource type="PackedScene" uid="uid://bapcgogbn6dxe" path="res://scenes/indicador_de_pontos.tscn" id="6_fbgke"]
+[ext_resource type="Texture2D" uid="uid://ygnmhpobci81" path="res://assets/TabuleiroNovo.png" id="7_eisbq"]
+[ext_resource type="AudioStream" uid="uid://kpbwekr6bc0r" path="res://sounds/TurnSound.wav" id="8_l31y8"]
+[ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="9_nl03p"]
+[ext_resource type="Theme" uid="uid://1c425rfubkoy" path="res://themes/btn_confirm_theme.theme" id="10_bhnbs"]
+[ext_resource type="Theme" uid="uid://dpbkvgsr6diux" path="res://themes/btn_theme2.theme" id="11_udasv"]
+
+[node name="Cena" type="Node2D"]
+script = ExtResource("1_0p23o")
+metadata/_edit_horizontal_guides_ = []
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="InfoJogadores" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 140
+theme_override_constants/margin_bottom = 80
+
+[node name="Perfil1" parent="CanvasLayer/InfoJogadores" instance=ExtResource("2_w78kg")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+nome = "Você"
+orientacao = 0
+
+[node name="Perfil2" parent="CanvasLayer/InfoJogadores" instance=ExtResource("2_w78kg")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+nome = "Adversário"
+
+[node name="Mensagem" parent="CanvasLayer" instance=ExtResource("3_0kscw")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ParallaxBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.211765, 0.266667, 0.313726, 1)
+
+[node name="MenuButton" type="MenuButton" parent="CanvasLayer"]
+offset_left = 1093.0
+offset_top = 10.0
+offset_right = 1133.0
+offset_bottom = 50.0
+scale = Vector2(1.2, 1.2)
+icon = ExtResource("4_33vco")
+item_count = 1
+popup/item_0/text = "Sair"
+popup/item_0/id = 0
+
+[node name="Tabuleiro" type="Node2D" parent="."]
+position = Vector2(544, 312)
+
+[node name="Casas" type="Node2D" parent="Tabuleiro"]
+
+[node name="Buraco0" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-208, 61)
+skew = -0.0296706
+
+[node name="Buraco1" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-112, 61)
+posicao = 1
+
+[node name="Buraco2" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-15, 61)
+posicao = 2
+
+[node name="Buraco3" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(82, 61)
+posicao = 3
+
+[node name="Buraco4" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(178, 61)
+posicao = 4
+
+[node name="Buraco5" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(275, 63)
+posicao = 5
+
+[node name="Kalla01" type="Marker2D" parent="Tabuleiro/Casas"]
+position = Vector2(375, -2)
+
+[node name="Buraco7" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(274, -60)
+scale = Vector2(1, 1.01356)
+posicao = 7
+
+[node name="Buraco8" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(178, -61)
+posicao = 8
+
+[node name="Buraco9" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(82, -60)
+posicao = 9
+
+[node name="Buraco10" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-16, -60)
+posicao = 10
+
+[node name="Buraco11" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-112, -62)
+posicao = 11
+
+[node name="Buraco12" parent="Tabuleiro/Casas" instance=ExtResource("5_nxe7d")]
+position = Vector2(-209, -62)
+posicao = 12
+
+[node name="Kalla02" type="Marker2D" parent="Tabuleiro/Casas"]
+position = Vector2(-307, -4)
+
+[node name="Indicadores" type="Node2D" parent="Tabuleiro"]
+
+[node name="IndicadorDePontos0" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-210, 163)
+
+[node name="IndicadorDePontos1" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-111, 163)
+
+[node name="IndicadorDePontos2" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-15, 163)
+
+[node name="IndicadorDePontos3" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(82, 163)
+
+[node name="IndicadorDePontos4" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(179, 163)
+
+[node name="IndicadorDePontos5" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(275, 163)
+
+[node name="IndicadorDePontos6" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(375, 163)
+
+[node name="IndicadorDePontos7" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(275, -162)
+
+[node name="IndicadorDePontos8" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(179, -162)
+
+[node name="IndicadorDePontos9" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(82, -162)
+
+[node name="IndicadorDePontos10" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-16, -162)
+
+[node name="IndicadorDePontos11" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-111, -162)
+
+[node name="IndicadorDePontos12" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-210, -162)
+
+[node name="IndicadorDePontos13" parent="Tabuleiro/Indicadores" instance=ExtResource("6_fbgke")]
+position = Vector2(-307, -162)
+
+[node name="Sprite" type="Sprite2D" parent="Tabuleiro"]
+position = Vector2(32, 3)
+scale = Vector2(1, 1.012)
+texture = ExtResource("7_eisbq")
+
+[node name="TurnSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_l31y8")
+volume_db = 5.0
+
+[node name="ModalConfirmacao" type="Window" parent="."]
+title = "Sair da Partida"
+initial_position = 1
+size = Vector2i(400, 100)
+visible = false
+theme_override_fonts/title_font = ExtResource("9_nl03p")
+
+[node name="Control" type="Control" parent="ModalConfirmacao"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="ModalConfirmacao/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ModalConfirmacao/Control/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MessageLabel" type="Label" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_nl03p")
+text = "Desejar confirmar esta ação?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BtnConfirmar" type="Button" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("10_bhnbs")
+theme_override_fonts/font = ExtResource("9_nl03p")
+text = "Confirmar"
+
+[node name="BtnFechar" type="Button" parent="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("11_udasv")
+theme_override_fonts/font = ExtResource("9_nl03p")
+text = "Fechar"
+
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco0" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco1" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco2" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco3" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco4" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco5" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco7" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco8" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco9" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco10" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco11" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="casa_selecionada" from="Tabuleiro/Casas/Buraco12" to="." method="_on_buraco_casa_selecionada"]
+[connection signal="focus_exited" from="ModalConfirmacao" to="." method="_on_modal_confirmacao_focus_exited"]
+[connection signal="button_up" from="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/BtnConfirmar" to="." method="_on_btn_confirmar_button_up"]
+[connection signal="button_up" from="ModalConfirmacao/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/BtnFechar" to="." method="_on_btn_fechar_button_up"]

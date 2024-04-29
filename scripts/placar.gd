@@ -42,6 +42,11 @@ func setExtraInfo(mensagem):
 	LabelExtraInfo.text = str(mensagem);
 	LabelExtraInfo.visible = true;
 
+func setSinglePlayerOp():
+	btn_revanche.visible = false;
+	perfil1.get_node("LabelName").text = "Jogador 1";
+	perfil2.get_node("LabelName").text = "Jogador 2";
+
 func _on_btn_repeat_game_button_up():
 	if(!solicitacao_revanche):
 		solicitacao_revanche = true;

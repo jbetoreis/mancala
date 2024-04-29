@@ -81,6 +81,14 @@ theme_override_fonts/font = ExtResource("3_e0u6n")
 theme_override_font_sizes/font_size = 25
 text = "Buscar Partida"
 
+[node name="BtnSinglePlayer" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 25
+text = "Jogar Offline"
+
 [node name="BtnCriarPartida" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_rbdju")
@@ -203,11 +211,78 @@ size_flags_horizontal = 4
 theme = ExtResource("2_rbdju")
 text = "   Encerrar  "
 
+[node name="PopupUmJogador" type="Window" parent="."]
+title = "Jogar Offline"
+initial_position = 1
+size = Vector2i(700, 150)
+visible = false
+theme_override_constants/title_outline_size = 1
+theme_override_constants/title_height = 30
+theme_override_fonts/title_font = ExtResource("3_e0u6n")
+theme_override_font_sizes/title_font_size = 20
+
+[node name="Control" type="Control" parent="PopupUmJogador"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="PopupUmJogador/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupUmJogador/Control/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="BtnLevel1" type="Button" parent="PopupUmJogador/Control/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 20
+text = "Nível
+ Fácil"
+
+[node name="BtnLevel2" type="Button" parent="PopupUmJogador/Control/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 20
+text = "Nível
+ Médio"
+
+[node name="BtnLevel3" type="Button" parent="PopupUmJogador/Control/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 20
+text = "Nível
+ Dificil"
+
+[node name="BtnNewRoom" type="Button" parent="PopupUmJogador/Control/CenterContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rbdju")
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("3_e0u6n")
+theme_override_font_sizes/font_size = 20
+text = "Criar
+ Sala"
+
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_ym0st")
-volume_db = 10.0
+volume_db = 1.0
 
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnFindMatch" to="." method="_on_btn_find_match_button_down"]
+[connection signal="button_down" from="CenterContainer/VBoxContainer/BtnSinglePlayer" to="." method="_on_btn_single_player_button_down"]
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnCriarPartida" to="." method="_on_btn_criar_partida_button_down"]
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnEntrarPartida" to="." method="_on_btn_entrar_partida_button_down"]
 [connection signal="button_up" from="CenterContainer/VBoxContainer/BtnFecharJogo" to="." method="_on_btn_fechar_jogo_button_up"]
@@ -216,3 +291,9 @@ volume_db = 10.0
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/CancelMatch" to="." method="_on_cancel_match_button_up"]
 [connection signal="focus_exited" from="PopupCriarPartida" to="." method="_on_popup_criar_partida_focus_exited"]
 [connection signal="button_up" from="PopupCriarPartida/Control/CenterContainer/VBoxContainer/EncerrarLobby" to="." method="_on_encerrar_lobby_button_up"]
+[connection signal="close_requested" from="PopupUmJogador" to="." method="_on_popup_um_jogador_close_requested"]
+[connection signal="focus_exited" from="PopupUmJogador" to="." method="_on_popup_um_jogador_focus_exited"]
+[connection signal="button_up" from="PopupUmJogador/Control/CenterContainer/HBoxContainer/BtnLevel1" to="." method="_on_btn_level_1_button_up"]
+[connection signal="button_up" from="PopupUmJogador/Control/CenterContainer/HBoxContainer/BtnLevel2" to="." method="_on_btn_level_2_button_up"]
+[connection signal="button_up" from="PopupUmJogador/Control/CenterContainer/HBoxContainer/BtnLevel3" to="." method="_on_btn_level_3_button_up"]
+[connection signal="button_up" from="PopupUmJogador/Control/CenterContainer/HBoxContainer/BtnNewRoom" to="." method="_on_btn_new_room_button_up"]
