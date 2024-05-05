@@ -1,8 +1,8 @@
-res://scenes/menu.tscn
+res://scenes/cena.tscn
 res://themes/find_match.tres
 res://themes/btn_theme.theme
-res://scripts/controller_off.gd
 res://scenes/cena_off.tscn
+res://scenes/menu.tscn
 res://scenes/placar.tscn
-res://scripts/GameManager.gd
+res://scripts/controller_off.gd
 res://scripts/client.gd
