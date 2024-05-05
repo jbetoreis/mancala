@@ -254,7 +254,7 @@ func passar_jogada(jogador):
 func montar_tabuleiro():
 	for casa in tabuleiro:
 		if casa["chave"] == "buraco":
-			for i in range(1):
+			for i in range(4):
 				var semente = pre_semente.instantiate()
 				get_tree().root.get_node("Cena/Tabuleiro").add_child(semente)
 				
@@ -263,7 +263,7 @@ func montar_tabuleiro():
 				semente.position = casa["posicao"].position + Vector2(offset_x, offset_y)
 				semente.DefineTexture(i - 1);
 				casa["sementes"].append(semente)
-			casa["indicador"].setValor(1)
+			casa["indicador"].setValor(4)
 
 func _on_buraco_casa_selecionada(posicao):
 	if tabuleiro[posicao]["jogador"]["id"] != turno_atual["jogador"]["id"]:

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bloq2pfo3b0pu"]
+[gd_scene load_steps=8 format=3 uid="uid://bloq2pfo3b0pu"]
 
 [ext_resource type="Script" path="res://scripts/client.gd" id="1_7ytio"]
 [ext_resource type="Theme" uid="uid://qhak1gp78ktt" path="res://themes/btn_theme.theme" id="2_rbdju"]
 [ext_resource type="FontFile" uid="uid://bsjrkfmdeeyms" path="res://fonts/Poppins-SemiBold.ttf" id="3_e0u6n"]
+[ext_resource type="Texture2D" uid="uid://c7yb16l1utthi" path="res://assets/CopyIcon.png" id="4_dpdvr"]
 [ext_resource type="AudioStream" uid="uid://brfves40jeqn0" path="res://sounds/ButtonSound.wav" id="4_ym0st"]
 
 [sub_resource type="Gradient" id="Gradient_n1ela"]
@@ -143,12 +144,20 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 35
 
-[node name="CodeMatch" type="LineEdit" parent="PopupEntrarPartida/Control/CenterContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupEntrarPartida/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CodeMatch" type="LineEdit" parent="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_e0u6n")
 theme_override_font_sizes/font_size = 15
 placeholder_text = "Código: "
+
+[node name="PasteByClipboard" type="Button" parent="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(0.611765, 0.611765, 0.611765, 1)
+layout_mode = 2
+icon = ExtResource("4_dpdvr")
 
 [node name="CenterContainer" type="CenterContainer" parent="PopupEntrarPartida/Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -198,12 +207,20 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 35
 
-[node name="Code" type="LineEdit" parent="PopupCriarPartida/Control/CenterContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupCriarPartida/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Code" type="LineEdit" parent="PopupCriarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_e0u6n")
 theme_override_font_sizes/font_size = 15
 text = "Código: "
+
+[node name="CopyCode" type="Button" parent="PopupCriarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(0.611765, 0.611765, 0.611765, 1)
+layout_mode = 2
+icon = ExtResource("4_dpdvr")
 
 [node name="EncerrarLobby" type="Button" parent="PopupCriarPartida/Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -287,9 +304,11 @@ volume_db = 1.0
 [connection signal="button_down" from="CenterContainer/VBoxContainer/BtnEntrarPartida" to="." method="_on_btn_entrar_partida_button_down"]
 [connection signal="button_up" from="CenterContainer/VBoxContainer/BtnFecharJogo" to="." method="_on_btn_fechar_jogo_button_up"]
 [connection signal="focus_exited" from="PopupEntrarPartida" to="." method="_on_popup_entrar_partida_focus_exited"]
+[connection signal="button_down" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer/PasteByClipboard" to="." method="_on_paste_by_clipboard_button_down"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/EntrarLobby" to="." method="_on_entrar_lobby_button_up"]
 [connection signal="button_up" from="PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CenterContainer/HBoxContainer/CancelMatch" to="." method="_on_cancel_match_button_up"]
 [connection signal="focus_exited" from="PopupCriarPartida" to="." method="_on_popup_criar_partida_focus_exited"]
+[connection signal="button_down" from="PopupCriarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer/CopyCode" to="." method="_on_copy_code_button_down"]
 [connection signal="button_up" from="PopupCriarPartida/Control/CenterContainer/VBoxContainer/EncerrarLobby" to="." method="_on_encerrar_lobby_button_up"]
 [connection signal="close_requested" from="PopupUmJogador" to="." method="_on_popup_um_jogador_close_requested"]
 [connection signal="focus_exited" from="PopupUmJogador" to="." method="_on_popup_um_jogador_focus_exited"]

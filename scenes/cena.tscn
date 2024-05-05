@@ -70,6 +70,7 @@ popup/item_0/id = 0
 
 [node name="Tabuleiro" type="Node2D" parent="."]
 position = Vector2(544, 312)
+scale = Vector2(1.2, 1.2)
 
 [node name="Casas" type="Node2D" parent="Tabuleiro"]
 

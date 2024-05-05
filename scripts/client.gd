@@ -27,8 +27,8 @@ var pre_find_label = preload("res://scenes/find_match_timer.tscn");
 @onready var popupCriar = $PopupCriarPartida;
 @onready var popupEntrar = $PopupEntrarPartida;
 @onready var popupUmJogador = $PopupUmJogador;
-@onready var codeNewMatch = $PopupCriarPartida/Control/CenterContainer/VBoxContainer/Code;
-@onready var codeEntryMatch = $PopupEntrarPartida/Control/CenterContainer/VBoxContainer/CodeMatch;
+@onready var codeNewMatch = $PopupCriarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer/Code;
+@onready var codeEntryMatch = $PopupEntrarPartida/Control/CenterContainer/VBoxContainer/HBoxContainer/CodeMatch;
 
 func _ready():
 	connectToServer("")
@@ -284,3 +284,14 @@ func _on_btn_level_2_button_up():
 func _on_btn_level_3_button_up():
 	GameManager.ModoJogo = "Nivel3"
 	get_tree().change_scene_to_file("res://scenes/cena_off.tscn");
+
+
+func _on_copy_code_button_down():
+	var codigo = codeNewMatch.text;
+	codigo = codigo.substr(8, codigo.length())
+	DisplayServer.clipboard_set(codigo);
+
+
+func _on_paste_by_clipboard_button_down():
+	var codigo = DisplayServer.clipboard_get();
+	codeEntryMatch.text = codigo;
