@@ -33,6 +33,8 @@ var revanche_adversario = false;
 func _ready():
 	jogador1["perfil"] = $CanvasLayer/InfoJogadores/Perfil1;
 	jogador2["perfil"] = $CanvasLayer/InfoJogadores/Perfil2;
+	jogador1["perfil"].hideTimer();
+	jogador2["perfil"].hideTimer();
 	
 	MensagemTurno("Vez do Jogador 1!");
 	jogador1["perfil"].startThink();
@@ -342,7 +344,12 @@ func ExibirPlacar():  # Continuar a analise a partir deste ponto
 	placar_final = placar;
 	
 	placar.definirPontuacao(placar_jogador1, placar_jogador2);
-	placar.definirVencedor(vencedor);
+	
+	if placar_jogador1 == placar_jogador2:
+		placar.setExtraInfo("Empate");
+	else:
+		placar.definirVencedor(vencedor);
+	
 	placar.setSinglePlayerOp();
 	placar.voltar_menu.connect(VoltarMenu);
 
@@ -436,3 +443,5 @@ func escolher_melhor_jogada(dificuldade):
 		melhor_jogada = jogadas_possiveis[randi() % jogadas_possiveis.size()]
 	
 	return melhor_jogada
+
+

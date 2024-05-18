@@ -40,8 +40,10 @@ func _ready():
 		MensagemTurno("Sua Vez!");
 		turno_atual["jogadas"] = 1;
 		jogador1["perfil"].startThink();
+		jogador1["perfil"].startTimer();
 	else:
 		jogador2["perfil"].startThink();
+		jogador2["perfil"].startTimer();
 	
 	BtnMenu.get_popup().id_pressed.connect(MenuPressed);
 	
@@ -255,11 +257,15 @@ func distribuir_sementes(casa_selecionada, jogador):
 						turno_atual["jogadas"] = 0
 						jogador1["perfil"].stopThink()
 						jogador2["perfil"].startThink()
+						jogador1["perfil"].stopTimer();
+						jogador2["perfil"].startTimer();
 					else:
 						turno_atual["jogadas"] = 1
 						MensagemTurno("Sua Vez!");
 						jogador1["perfil"].startThink()
 						jogador2["perfil"].stopThink()
+						jogador1["perfil"].startTimer();
+						jogador2["perfil"].stopTimer();
 			break
 		elif i == 13: # Ainda falta sementes para distribuir
 			i = 0;
@@ -274,10 +280,14 @@ func passar_jogada(is_remote):
 		MensagemTurno("Sua Vez!");
 		jogador1["perfil"].startThink()
 		jogador2["perfil"].stopThink()
+		jogador1["perfil"].startTimer();
+		jogador2["perfil"].stopTimer();
 	else:
 		turno_atual["jogadas"] = 0
 		jogador1["perfil"].stopThink()
 		jogador2["perfil"].startThink()
+		jogador1["perfil"].stopTimer();
+		jogador2["perfil"].startTimer();
 
 @rpc("any_peer","call_remote")
 func passar_jogada_remote():
@@ -285,6 +295,8 @@ func passar_jogada_remote():
 	MensagemTurno("Sua Vez!");
 	jogador1["perfil"].startThink()
 	jogador2["perfil"].stopThink()
+	jogador1["perfil"].startTimer();
+	jogador2["perfil"].stopTimer();
 
 func montar_tabuleiro():
 	for casa in tabuleiro:
@@ -382,6 +394,7 @@ func ExibirPlacarAbandono(mensagem):
 	turno_atual["jogadas"] = 0;
 	jogador1["perfil"].visible = false;
 	jogador2["perfil"].visible = false;
+	$TimerJogada.stop();
 	
 	var placar = pre_placar.instantiate();
 	get_tree().root.get_node("Cena/CanvasLayer").add_child(placar)
@@ -398,6 +411,7 @@ func ExibirPlacar():
 	var placar_jogador1 = tabuleiro[6]["sementes"].size();
 	var placar_jogador2 = tabuleiro[13]["sementes"].size();
 	var vencedor = 1 if placar_jogador1 > placar_jogador2 else 2;
+	$TimerJogada.stop();
 	
 	var placar = pre_placar.instantiate();
 	get_tree().root.get_node("Cena/CanvasLayer").add_child(placar)
@@ -405,7 +419,11 @@ func ExibirPlacar():
 	placar_final = placar;
 	
 	placar.definirPontuacao(placar_jogador1, placar_jogador2);
-	placar.definirVencedor(vencedor);
+	if placar_jogador1 == placar_jogador2:
+		placar.setExtraInfo("Empate");
+	else:
+		placar.definirVencedor(vencedor);
+	
 	placar.voltar_menu.connect(VoltarMenu);
 	placar.revanche_signal.connect(RevancheSignal);
 	placar.close_revanche_signal.connect(CloseRevancheSignal);
@@ -460,3 +478,14 @@ func _on_btn_confirmar_button_up():
 
 func _on_btn_fechar_button_up():
 	ModalConfirmacao.hide();
+
+func segundos_para_minutos_segundos(segundos):
+	var minutos = int(segundos / 60)
+	var segundos_restantes = int(segundos % 60)
+	var segundos_str = str(segundos_restantes)
+	
+	# Adiciona um zero à esquerda se os segundos forem menores que 10
+	if segundos_restantes < 10:
+		segundos_str = "0" + segundos_str
+	
+	return str(minutos) + ":" + segundos_str
